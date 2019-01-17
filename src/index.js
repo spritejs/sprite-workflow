@@ -8,8 +8,8 @@ class SpriteWorkflow extends BaseNode {
   /** 
    * selector:css选择器
    * size:canvas大小
-   * steps:步骤
-   * lines:连接线
+   * steps:步骤数据存储位置
+   * lines:连接线数据存储位置
    * **/
   public attrs = {
     'selector': '',
@@ -21,7 +21,7 @@ class SpriteWorkflow extends BaseNode {
     this.attr(attrs);
   }
 
-  renderStep() {
-
+  addStep(object, renderStep) {
+    this.attrs.steps.push(obj);
   }
 }

@@ -12,5 +12,4 @@ class Step extend BaseNode{
     $sprite.attr({ size: [ 20, 20 ], bgcolor: '#f00' });
     this.append($sprite);
   }
-
 }
