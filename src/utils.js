@@ -1,17 +1,18 @@
 /**
  * 获取类型
  * @param {any} value
+ * @return {String} type
  */
 function getType(value) {
   const str = typeof value
   if (str === 'object') {
-    return value === null ? null : toStr(value).toLowerCase()
+    return value === null ? null : Object.prototype.toString.call(value).slice(8, -1).toLowerCase()
   }
   return str
 }
 /**
  * 获取guid
- * @return guid
+ * @return {String} guid
  */
 function guid() {
   // 生产guid
@@ -21,4 +22,4 @@ function guid() {
     return v.toString(16)
   })
 }
-exoprt { getType, guid }
+export { getType, guid }

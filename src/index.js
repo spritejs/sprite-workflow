@@ -1,27 +1,50 @@
 import { getType, guid } from './utils'
 import { install } from 'sprite-extend-shapes'
-import { BaseNode } from './BaseNode'
-//import * as spritejs from 'spritejs'
+import { Base } from './base'
+import { Step, Link } from './plugin'
+import * as spritejs from 'spritejs'
+const { Scene, Layer } = spritejs;
 spritejs.use(install);
 
-class SpriteWorkflow extends BaseNode {
-  /** 
-   * selector:css选择器
-   * size:canvas大小
-   * steps:步骤数据存储位置
-   * lines:连接线数据存储位置
-   * **/
-  public attrs = {
-    'selector': '',
-    'size': [ 600, 400 ],
-    'steps': [],
-    'lines': []
-  }
+class SpriteWorkflow extends Base {
   constructor(attrs) {
-    this.attr(attrs);
+    super(attrs);
+    /*****
+  * selector:css选择器
+  * size:canvas大小
+  * steps:步骤数据存储位置
+  * links:连接线数据存储位置
+  * **/
+    this.attr(Object.assign({
+      'selector': '',
+      'size': [ 600, 400 ],
+      'steps': [],
+      'links': []
+    }, attrs));
+    this.draw()
   }
-
-  addStep(object, renderStep) {
-    this.attrs.steps.push(obj);
+  draw() {
+    console.log('draw')
+  }
+  addStep(object, render) {
+    let steps = this.attr('steps');
+    steps.push(object);
+    if (render && getType(render) === 'function') {
+      render(this);
+    } else {
+      let $step = new Step(object, render).render();
+      console.log()
+      this.append(new Step(object, render).render());
+    }
+  }
+  addLink(object, render) {
+    let links = this.attr('links');
+    links.push(object);
+    if (render && getType(render) === 'function') {
+      render(this);
+    } else {
+      this.append(new Link(object, render).render());
+    }
   }
 }
+export { SpriteWorkflow }

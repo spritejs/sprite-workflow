@@ -11,12 +11,13 @@ if (fs.existsSync('./.babelrc')) {
 
 module.exports = function (env = {}) {
   const externals = {};
-
   return {
     mode: 'development',
     entry: './example/test',
     devtool: 'inline-source-map',
-
+    output: {
+      libraryTarget: "umd"
+    },
     module: {
       rules: [
         {
@@ -29,7 +30,7 @@ module.exports = function (env = {}) {
         },
       ]
     },
-    stats: 'errors-only',
+    //stats: 'errors-only',
 
     devServer: {
       contentBase: path.join(__dirname, 'example'),
@@ -47,6 +48,9 @@ module.exports = function (env = {}) {
       }),
       new webpack.NamedModulesPlugin(),
       new webpack.HotModuleReplacementPlugin()
-    ]
+    ],
+    externals: {
+      spritejs: 'spritejs'
+    }
   };
 };

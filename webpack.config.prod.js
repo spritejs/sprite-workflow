@@ -31,6 +31,9 @@ module.exports = function (env = {}) {
           },
         },
       ]
+    },
+    externals: {
+      spritejs: 'spritejs'
     }
   };
 };
