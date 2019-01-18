@@ -2,16 +2,16 @@ import { Base } from './base'
 import { Sprite, Polyline, Rect } from 'spritejs';
 class Step extends Base {
 
-  constructor(attrs, type) {
+  constructor(attrs) {
     super();
     this.attrs = Object.assign({}, attrs);
     /*内置的Step 类型，有 ['rect','circle','triangle','star','diamond'] */
-    this.type = type || 'rect';
+    this.type = attrs.type || 'rect';
   }
-  render() {
+  draw() {
     let $rect = new Rect();
-    $rect.attr({ size: [ 20, 20 ], bgcolor: '#f00' });
-    this.append($rect);
+    $rect.attr({ size: [ 20, 20 ], bgcolor: '#f00', draggable: true });
+    this.container.append($rect);
     return this.container
   }
 }
@@ -24,7 +24,7 @@ class Link extends Base {
     /*内置的Link 类型，有 ['solid','dash'] */
     this.type = type;
   }
-  render() {
+  draw() {
     let $link = new Polyline();
     $link.attr({ size: [ 20, 20 ], bgcolor: '#f00' });
     this.append($link);

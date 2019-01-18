@@ -4,6 +4,8 @@ import { Base } from './base'
 import { Step, Link } from './plugin'
 import * as spritejs from 'spritejs'
 const { Scene, Layer } = spritejs;
+const _render = Symbol('render');
+const _uid = Symbol('uid');
 spritejs.use(install);
 
 class SpriteWorkflow extends Base {
@@ -21,29 +23,43 @@ class SpriteWorkflow extends Base {
       'steps': [],
       'links': []
     }, attrs));
+    const { selector, size } = this.attr();
+    const scene = new Scene(selector, {
+      viewport: this.attr('size'),
+      displayRatio: 'auto'
+    })
+    this.layer = scene.layer();
     this.draw()
   }
   draw() {
-    console.log('draw')
+    const { steps, links } = this.attr();
+    steps.forEach(object => {
+      addStep(object)
+    });
   }
-  addStep(object, render) {
+  addStep(object) {
     let steps = this.attr('steps');
+    object[ _uid ] = guid();
     steps.push(object);
+    let $step = new Step(object)
+    $step[ _uid ] = object[ _uid ];
+    let render = object.type;
     if (render && getType(render) === 'function') {
-      render(this);
+      draw($step);
     } else {
-      let $step = new Step(object, render).render();
-      console.log()
-      this.append(new Step(object, render).render());
+      let $dom = $step.draw();
+      this.layer.append($dom);
+      //this.append($dom);
     }
   }
-  addLink(object, render) {
+  addLink(object) {
     let links = this.attr('links');
     links.push(object);
-    if (render && getType(render) === 'function') {
-      render(this);
+    let draw = object.type;
+    if (draw && getType(draw) === 'function') {
+      draw(this);
     } else {
-      this.append(new Link(object, render).render());
+      this.append(new Link(object).draw());
     }
   }
 }

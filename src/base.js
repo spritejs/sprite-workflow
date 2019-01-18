@@ -1,12 +1,23 @@
 
 import { Group } from 'spritejs'
 import { getType } from './utils'
+import JSONSchemaValidator from 'q-schema-validator'
 let attrs = Symbol('attrs');
 class Base {
   constructor(attrs) {
     this.container = new Group();
+    this.validatorSchema(attrs);
   }
-  /*重写attr方法，保持与spritejs 接口统一 */
+  validatorSchema(attrs) {
+    let curName = this.constructor.name.toLowerCase();
+    let schema = require("./schema/" + curName + ".json");
+    var validator = new JSONSchemaValidator();
+    let res = validator.validate(attrs, schema);
+    if (res.length) {
+      console.error(`${curName} data validator fail`, '\n', JSON.stringify(res, null, 2))
+    }
+  }
+  /*保持与spritejs 接口统一 */
   attr(name, value) {
     if (name === undefined && value === undefined) { //获取全部属性 this.attr()
       return this[ attrs ];
