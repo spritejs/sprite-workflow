@@ -1,4 +1,7 @@
 import { SpriteWorkflow } from '../src/index';
-let workflow = new SpriteWorkflow({ selector: '#workflow' });
+let $wrap = document.querySelector("#workflow");
+const width = $wrap.offsetWidth;
+const height = $wrap.offsetHeight;
+let workflow = new SpriteWorkflow({ selector: '#workflow', steps: [ { data: { a: 1 }, type: 'rect', pos: [ 100, 100 ] } ], size: [ width, height ] });
 window.workflow = workflow
-workflow.addStep({ a: 1, type: 'rect' });
+workflow.addStep({ data: { a: 1 }, type: 'rect', pos: [ 200, 100 ] });

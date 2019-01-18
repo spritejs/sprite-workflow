@@ -10,9 +10,10 @@ class Base {
   }
   validatorSchema(attrs) {
     let curName = this.constructor.name.toLowerCase();
-    let schema = require("./schema/" + curName + ".json");
+    let schema = require("./schema/" + curName + ".json.js");
+    console.log(schema)
     var validator = new JSONSchemaValidator();
-    let res = validator.validate(attrs, schema);
+    let res = validator.validate(attrs, schema.default);
     if (res.length) {
       console.error(`${curName} data validator fail`, '\n', JSON.stringify(res, null, 2))
     }

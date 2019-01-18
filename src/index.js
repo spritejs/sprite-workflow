@@ -34,28 +34,28 @@ class SpriteWorkflow extends Base {
   draw() {
     const { steps, links } = this.attr();
     steps.forEach(object => {
-      addStep(object)
+      this.addStep(object)
     });
   }
   addStep(object) {
+    console.log(object)
     let steps = this.attr('steps');
     object[ _uid ] = guid();
     steps.push(object);
     let $step = new Step(object)
     $step[ _uid ] = object[ _uid ];
-    let render = object.type;
+    let render = object.draw;
     if (render && getType(render) === 'function') {
       draw($step);
     } else {
       let $dom = $step.draw();
       this.layer.append($dom);
-      //this.append($dom);
     }
   }
   addLink(object) {
     let links = this.attr('links');
     links.push(object);
-    let draw = object.type;
+    let draw = object.draw;
     if (draw && getType(draw) === 'function') {
       draw(this);
     } else {

@@ -1,4 +1,4 @@
-{
+export default {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "sprite workflow schema",
   "description": "Schema of sprite workflow",
@@ -21,11 +21,17 @@
           "id": {
             "type": "string"
           },
-          "type": {
+          "draw": {
             "type": [
               "function",
               "string"
             ]
+          },
+          "pos": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         }
       }
