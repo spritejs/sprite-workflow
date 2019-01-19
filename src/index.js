@@ -1,7 +1,7 @@
 import { getType, guid } from './utils'
 import { install } from 'sprite-extend-shapes'
 import { Base } from './base'
-import { Step, Link } from './plugin'
+import { Step, Link } from './components'
 import * as spritejs from 'spritejs'
 const { Scene, Layer } = spritejs;
 const _render = Symbol('render');
@@ -35,13 +35,17 @@ class SpriteWorkflow extends Base {
     steps.forEach(object => {
       this.addStep(object)
     });
+    links.forEach(object => {
+      this.addLink(object)
+    });
   }
   addStep(object) {
     let steps = this.attr('steps');
     steps.push(object);
     let $step = new Step(object)
-    let render = object.draw;
-    if (render && getType(render) === 'function') {
+    $step.workflowData = this.attr();
+    let draw = object.draw;
+    if (draw && getType(draw) === 'function') {
       draw($step);
     } else {
       let $dom = $step.draw();
@@ -51,11 +55,14 @@ class SpriteWorkflow extends Base {
   addLink(object) {
     let links = this.attr('links');
     links.push(object);
+    let $link = new Link(object)
+    $link.workflowData = this.attr();
     let draw = object.draw;
     if (draw && getType(draw) === 'function') {
-      draw(this);
+      draw($link);
     } else {
-      this.append(new Link(object).draw());
+      let $dom = $link.draw();
+      this.layer.append($dom);
     }
   }
 }

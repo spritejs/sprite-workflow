@@ -6,6 +6,7 @@ let attrs = Symbol('attrs');
 class Base {
   constructor(attrs) {
     this.container = new Group();
+    this.container.attr({ size: [ 0.01, 0.01 ], clipOverflow: false });//将group设置成非常小，不影响其他dom，并且不clip内部元素
     this.validatorSchema(attrs);
   }
   validatorSchema(attrs) {

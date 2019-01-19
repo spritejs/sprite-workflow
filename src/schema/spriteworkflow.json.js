@@ -37,6 +37,28 @@ export default {
         "required": [ "id" ],
       },
       "minItems": 2
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "startStepId": {
+            "type": "string"
+          },
+          "endStepId": {
+            "type": "string"
+          },
+          "draw": {
+            "type": [
+              "function",
+              "string"
+            ]
+          }
+        },
+        "required": [ "startStepId", "endStepId" ],
+      },
+      "minItems": 1
     }
   },
   "required": [
