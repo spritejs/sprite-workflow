@@ -1,2 +1,2 @@
 import allSchema from './spriteworkflow.json'
-export default allSchema.properties.steps;
+export default allSchema.properties.steps.items;

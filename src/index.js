@@ -5,7 +5,6 @@ import { Step, Link } from './plugin'
 import * as spritejs from 'spritejs'
 const { Scene, Layer } = spritejs;
 const _render = Symbol('render');
-const _uid = Symbol('uid');
 spritejs.use(install);
 
 class SpriteWorkflow extends Base {
@@ -38,12 +37,9 @@ class SpriteWorkflow extends Base {
     });
   }
   addStep(object) {
-    console.log(object)
     let steps = this.attr('steps');
-    object[ _uid ] = guid();
     steps.push(object);
     let $step = new Step(object)
-    $step[ _uid ] = object[ _uid ];
     let render = object.draw;
     if (render && getType(render) === 'function') {
       draw($step);

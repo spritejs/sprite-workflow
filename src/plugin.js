@@ -4,7 +4,7 @@ import { draggable } from 'sprite-draggable'
 class Step extends Base {
 
   constructor(attrs) {
-    super();
+    super(attrs);
     this.attrs = Object.assign({}, attrs);
     const { pos } = attrs;
     this.container.attr({ pos, bgcolor: 'rgba(255,255,255,0)' });
@@ -22,7 +22,7 @@ class Step extends Base {
 
 class Link extends Base {
   constructor(attrs, type) {
-    super();
+    super(attrs);
     /*属性，相关绘制属性等 */
     this.attrs = Object.assign({}, attrs);
     /*内置的Link 类型，有 ['solid','dash'] */

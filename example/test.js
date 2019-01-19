@@ -2,6 +2,14 @@ import { SpriteWorkflow } from '../src/index';
 let $wrap = document.querySelector("#workflow");
 const width = $wrap.offsetWidth;
 const height = $wrap.offsetHeight;
-let workflow = new SpriteWorkflow({ selector: '#workflow', steps: [ { data: { a: 1 }, type: 'rect', pos: [ 100, 100 ] } ], size: [ width, height ] });
+const getGuid = () => Math.random().toString(36).slice(2);
+
+let steps = [
+  { id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 200, 100 ] },
+  { id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 100, 100 ] }
+]
+
+let workflow = new SpriteWorkflow({ selector: '#workflow', steps, size: [ width, height ] });
 window.workflow = workflow
-workflow.addStep({ data: { a: 1 }, type: 'rect', pos: [ 200, 100 ] });
+
+//workflow.addStep({ id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 200, 100 ] });

@@ -33,8 +33,10 @@ export default {
               "type": "number"
             }
           }
-        }
-      }
+        },
+        "required": [ "id" ],
+      },
+      "minItems": 2
     }
   },
   "required": [

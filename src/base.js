@@ -9,13 +9,24 @@ class Base {
     this.validatorSchema(attrs);
   }
   validatorSchema(attrs) {
-    let curName = this.constructor.name.toLowerCase();
-    let schema = require("./schema/" + curName + ".json.js");
-    console.log(schema)
+    let curName = this.constructor.name;
+    let schema = require("./schema/" + curName.toLowerCase() + ".json.js");
     var validator = new JSONSchemaValidator();
     let res = validator.validate(attrs, schema.default);
     if (res.length) {
-      console.error(`${curName} data validator fail`, '\n', JSON.stringify(res, null, 2))
+      //console.error(`${curName} params validator fail`, '\n error message', res, '\n validator params', attrs)
+      console.groupCollapsed('%c♥ %s params validation fail', "color: red", curName);
+      console.log('%c → validated message: ↵', 'color:#42b983')
+      res.forEach(item => {
+        console.log(item)
+      });
+      console.log('\n');
+      console.log('%c → validated params: ↵', 'color:#42b983')
+      console.log(attrs);
+      console.log('\n');
+      console.log('%c → validated schema: ↵', 'color:#42b983')
+      console.log(schema.default)
+      console.groupEnd()
     }
   }
   /*保持与spritejs 接口统一 */
