@@ -3,8 +3,9 @@ import { install } from 'sprite-extend-shapes'
 import { Base } from './base'
 import { Step, Link } from './components'
 import * as spritejs from 'spritejs'
+import { _steps, _links, _workflow } from './symbolNames'
 const { Scene, Layer } = spritejs;
-const _render = Symbol('render');
+
 spritejs.use(install);
 
 class SpriteWorkflow extends Base {
@@ -27,9 +28,15 @@ class SpriteWorkflow extends Base {
       viewport: this.attr('size'),
       displayRatio: 'auto'
     })
+    this[ _steps ] = [];
+    this[ _links ] = [];
     this.layer = scene.layer();
-    this.draw()
+    //this.addChildren();
+    //this.draw()
   }
+  /**
+   * 绘制步骤和连线
+   */
   draw() {
     const { steps, links } = this.attr();
     steps.forEach(object => {
@@ -39,29 +46,47 @@ class SpriteWorkflow extends Base {
       this.addLink(object)
     });
   }
-  addStep(object) {
+  update() {
+
+  }
+  /**
+   * 添加步骤
+   * @param {step} Step
+   */
+  addStep(object, draw, update) {
     let steps = this.attr('steps');
-    steps.push(object);
-    let $step = new Step(object)
-    $step.workflowData = this.attr();
-    let draw = object.draw;
-    if (draw && getType(draw) === 'function') {
-      draw($step);
+    if (steps.indexOf(object) === -1) {
+      steps.push(object);
+    }
+    let step = new Step(object)
+    step[ _workflow ] = this;
+    this[ _steps ].push(step);
+    let cDraw = null;
+    if (cDraw && getType(cDraw) === 'function') {
+      step.draw = cDraw;
     } else {
-      let $dom = $step.draw();
+      let $dom = step.draw();
       this.layer.append($dom);
     }
   }
-  addLink(object) {
+  /**
+   * 添加步骤连线
+   * @param {link} Link
+   */
+  addLink(object, create, update) {
     let links = this.attr('links');
-    links.push(object);
-    let $link = new Link(object)
-    $link.workflowData = this.attr();
-    let draw = object.draw;
+    if (links.indexOf(object) === -1) {
+      links.push(object);
+    }
+    let link = new Link(object)
+    link[ _workflow ] = this;
+    this[ _links ].push(link);
+    link.workflowData = this.attr();
+    let draw = null;
     if (draw && getType(draw) === 'function') {
-      draw($link);
+      link.draw = draw;
     } else {
-      let $dom = $link.draw();
+      let $dom = link.draw();
       this.layer.append($dom);
     }
   }

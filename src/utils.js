@@ -1,7 +1,7 @@
 /**
  * 获取类型
- * @param {any} value
- * @return {String} type
+ * @param {any} 
+ * @return {String} 
  */
 function getType(value) {
   const str = typeof value
@@ -22,4 +22,18 @@ function guid() {
     return v.toString(16)
   })
 }
-export { getType, guid }
+
+/**
+ * 返回空对象，创建新对象
+ * @param {Object}
+ * @return {Object}
+ */
+function emptyObj(obj) {
+  let resObj = Object.create(null);
+  if (obj !== undefined) {
+    resObj = Object.assign(resObj, obj);
+  }
+  return resObj;
+}
+
+export { getType, guid, emptyObj }
