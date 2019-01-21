@@ -11,9 +11,9 @@ let steps = [
 ];
 
 let links = [
-  { startStepId: steps[ 0 ].id, endStepId: steps[ 1 ].id },
-  { startStepId: steps[ 1 ].id, endStepId: steps[ 2 ].id },
-  { startStepId: steps[ 2 ].id, endStepId: steps[ 0 ].id },
+  { startStepId: steps[ 0 ].id, endStepId: steps[ 1 ].id, startOffset: 15, endOffset: 15 },
+  { startStepId: steps[ 1 ].id, endStepId: steps[ 2 ].id, startOffset: 15, endOffset: 15 },
+  { startStepId: steps[ 2 ].id, endStepId: steps[ 0 ].id, startOffset: 15, endOffset: 15 },
 ]
 
 let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });

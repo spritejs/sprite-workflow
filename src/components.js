@@ -1,7 +1,7 @@
 import { Base } from './base'
 import { Sprite, Polyline, Rect } from 'spritejs';
 import { draggable } from 'sprite-draggable'
-import { emptyObj, getType } from './utils'
+import { emptyObj, getType, getLinePoint } from './utils'
 import { _links, _workflow, _steps } from './symbolNames'
 class Step extends Base {
   constructor(attrs) {
@@ -33,7 +33,9 @@ class Link extends Base {
     /*属性，相关绘制属性等 */
     this.attr({
       startPoint: [ 0, 0 ],
-      endPoint: [ 0, 0 ]
+      endPoint: [ 0, 0 ],
+      startOffset: 0,
+      endOffset: 0
     })
     this.attr(emptyObj(attrs));
 
@@ -43,13 +45,16 @@ class Link extends Base {
     let needFreshLink = false;
     let keys = Object.keys(newAttrs);
     if (keys.indexOf('startPoint') || keys.indexOf('endPoint')) {
-      this.update(newAttrs, oldAttrs);
+      const { startPoint, endPoint, startOffset, endOffset } = this.attr();
+      const linkStartPoint = getLinePoint(startPoint, endPoint, startOffset);
+      const linkEndPoint = getLinePoint(endPoint, startPoint, startOffset);
+      this.update(Object.assign({ linkStartPoint, linkEndPoint }, newAttrs), oldAttrs);
     }
   }
   update(newAttrs, oldAttrs) {
-    const { startPoint, endPoint } = this.attr();
+    const { linkStartPoint, linkEndPoint } = newAttrs;
     if (this.$link) {
-      this.$link.attr({ points: [ startPoint, endPoint ] });
+      this.$link.attr({ points: [ linkStartPoint, linkEndPoint ] });
     }
   }
   draw() {
