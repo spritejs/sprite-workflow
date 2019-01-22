@@ -1,15 +1,14 @@
 import { Base } from './base'
-import { Sprite, Polyline, Rect } from 'spritejs';
+import { Sprite, Polyline, Rect, Label, Triangle } from 'spritejs';
 import { draggable } from 'sprite-draggable'
-import { emptyObj, getType, getLinePoint } from './utils'
+import { newObj, getType, getLinePoint, getPointsDistance } from './utils'
 import { _links, _workflow, _steps } from './symbolNames'
 class Step extends Base {
   constructor(attrs) {
     super(attrs);
-    this.attr({ anchorPoint: [ 0, 0 ] }); //连线的点，默认Step的anchor点，渲染的时候，会设置这个点
-    this.attr(emptyObj(attrs));
+    this.attr(newObj({ anchorOffset: [ 0, 0 ] }, attrs));//anchorOffset连线的点，默认Step的anchor点，渲染的时候，会设置这个点
     const { pos } = attrs;
-    this.container.attr({ pos, bgcolor: 'rgba(255,0,0,0.5)', zIndex: 101 });
+    this.container.attr({ pos, zIndex: 101 });
     draggable(this.container)
     /*内置的Step 类型，有 ['rect','circle','triangle','star','diamond'] */
     this.type = attrs.type || 'rect';
@@ -19,9 +18,10 @@ class Step extends Base {
     });
   }
   draw() {
-    let $rect = new Rect();
-    $rect.attr({ size: [ 20, 20 ], bgcolor: 'rgba(0,255,0,0.8)', zIndex: 101 });
-    this.attr({ anchorPoint: [ 10, 10 ] })
+    const { draw, text } = this.attr();
+    let $rect = new Label(text);
+    $rect.attr({ bgcolor: 'rgba(0,255,0,0.8)', padding: [ 6, 10 ], borderRadius: [ 5, 5 ] });
+    console.log(this.container)
     this.container.append($rect);
     refreshLink(this);
     return this.container
@@ -37,18 +37,23 @@ class Link extends Base {
       startOffset: 0,
       endOffset: 0
     })
-    this.attr(emptyObj(attrs));
+    this.attr(newObj(attrs));
 
     /*内置的Link 类型，有 ['solid','dash'] */
   }
   attrUpdate(newAttrs, oldAttrs) {
     let needFreshLink = false;
     let keys = Object.keys(newAttrs);
-    if (keys.indexOf('startPoint') || keys.indexOf('endPoint')) {
+    if (keys.indexOf('startPoint') !== -1 || keys.indexOf('endPoint') !== -1) {
       const { startPoint, endPoint, startOffset, endOffset } = this.attr();
-      const linkStartPoint = getLinePoint(startPoint, endPoint, startOffset);
-      const linkEndPoint = getLinePoint(endPoint, startPoint, startOffset);
-      this.update(Object.assign({ linkStartPoint, linkEndPoint }, newAttrs), oldAttrs);
+      const r = getPointsDistance(startPoint, endPoint);
+      let linkStartPoint = [ 0, 0 ];
+      let linkEndPoint = [ 0, 0 ];
+      if (r > (startOffset + endOffset)) {
+        linkStartPoint = getLinePoint(startPoint, endPoint, startOffset);
+        linkEndPoint = getLinePoint(endPoint, startPoint, endOffset);
+      }
+      this.update(newObj({ linkStartPoint, linkEndPoint }, newAttrs), oldAttrs);
     }
   }
   update(newAttrs, oldAttrs) {
@@ -56,14 +61,25 @@ class Link extends Base {
     if (this.$link) {
       this.$link.attr({ points: [ linkStartPoint, linkEndPoint ] });
     }
+    if (this.$arrow) {
+      let angle = Math.atan2((linkEndPoint[ 1 ] - linkStartPoint[ 1 ]), (linkEndPoint[ 0 ] - linkStartPoint[ 0 ])) //弧度  0.6435011087932844
+      let theta = angle * (180 / Math.PI); //角度  36.86989764584402
+      this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
+    }
   }
   draw() {
-    let $link = new Polyline();
-    this.$link = $link;
+    this.$link = new Polyline();
+    this.$arrow = new Triangle();
     const { startPoint, endPoint } = this.attr()
-    $link.attr({ points: [ startPoint, endPoint ], lineWidth: 2, color: '#eee', bgcolor: '#f00' });
-    this.container.append($link);
-    this.container.attr({ bgcolor: "rgba(255,0,0,0.2)", size: [ 0.1, 0.1 ], clipOverflow: false })
+    this.$link.attr({ points: [ startPoint, endPoint ], lineWidth: 2, color: '#eee', bgcolor: '#f00' });
+    this.$arrow.attr({ color: 'red', pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: 'red' });
+    this.container.append(this.$link);
+    this.container.append(this.$arrow);
+    //link的container容器高宽为0，原始坐标为[0,0],内部元素的坐标相对世界坐标，group只起打包作用
+    this.container.attr({ bgcolor: 'rgba(255,0,0,1)', size: [ 0.1, 0.1 ] })
+    this.container.on('click', () => {
+      console.log('click')
+    })
     refreshLink(this);
     return this.container;
   }
@@ -95,7 +111,7 @@ function refreshLink(params) { // [steps,links]根据step,link，更新link
     const { startStepId, endStepId } = link.attr();
     const stepId = step.attr("id");
     const [ x, y ] = step.container.attr('pos');
-    const [ anchorX, anchorY ] = step.attr("anchorPoint");
+    const [ anchorX, anchorY ] = step.attr("anchorOffset");
     const targetPoint = [ x + anchorX, y + anchorY ];
     if (startStepId === stepId) {
       link.attr({ startPoint: targetPoint });

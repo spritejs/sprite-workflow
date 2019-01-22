@@ -28,10 +28,10 @@ function guid() {
  * @param {Object}
  * @return {Object}
  */
-function emptyObj(obj) {
+function newObj(obj) {
   let resObj = Object.create(null);
   if (obj !== undefined) {
-    resObj = Object.assign(resObj, obj);
+    resObj = Object.assign(resObj, Object.assign.apply(this, arguments));
   }
   return resObj;
 }
@@ -52,4 +52,15 @@ function getLinePoint(point1, point2, d) {
   return [ x, y ];
 }
 
-export { getType, guid, emptyObj, getLinePoint }
+/**
+ * 求两个坐标点的距离
+ * @param {*} point1 起始点
+ * @param {*} points 终点
+ */
+function getPointsDistance(point1, point2) {
+  const [ x1, y1 ] = point1;
+  const [ x2, y2 ] = point2;
+  return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+export { getType, guid, newObj, getLinePoint, getPointsDistance }
