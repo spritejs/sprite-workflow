@@ -1,4 +1,4 @@
-import { SpriteWorkflow } from '../src/index';
+import { SpriteWorkflow, Link, Step } from '../src/index';
 let $wrap = document.querySelector("#workflow");
 const width = $wrap.offsetWidth;
 const height = $wrap.offsetHeight;
@@ -17,10 +17,12 @@ let links = [
 ]
 
 let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });
-steps.forEach(step => {
+steps.forEach(object => {
+  let step = new Step(object);
   workflow.addStep(step);
 })
-links.forEach(link => {
+links.forEach(object => {
+  let link = new Link(object);
   workflow.addLink(link);
 });
 

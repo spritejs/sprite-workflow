@@ -1,10 +1,11 @@
 
-import { Group } from 'spritejs'
+import { Group, BaseNode } from 'spritejs'
 import { getType, newObj } from './utils'
 import JSONSchemaValidator from 'q-schema-validator'
 let attrs = Symbol('attrs');
-class Base {
+class Base extends BaseNode {
   constructor(attrs) {
+    super();
     this.container = new Group();
     this.container.attr({ bgcolor: 'rgba(255,255,255,0.01)', anchor: [ 0.5, 0.5 ], clipOverflow: false });//将group设置成非常小，不影响其他dom，并且不clip内部元素
     this.validatorSchema(attrs);
