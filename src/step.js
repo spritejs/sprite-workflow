@@ -10,7 +10,7 @@ class Step extends Base {
     this.attr(newObj({ anchorOffset: [ 0, 0 ] }, attrs));//anchorOffset连线的点，默认Step的anchor点，渲染的时候，会设置这个点
     const { pos } = attrs;
     this.container.attr({ pos, zIndex: 100 });
-    draggable(this.container)
+    this.draggable();
     /*内置的Step 类型，有 ['rect','circle','triangle','star','diamond'] */
     this.type = attrs.type || 'rect';
     this.container.on('drag', (e) => {
@@ -21,6 +21,12 @@ class Step extends Base {
     this.container.on('dragend', (e) => {
       this.container.attr({ zIndex: 100 });
     });
+    this.dispatchEvent('ready', { a: 1 });
+    let me = this;
+
+  }
+  draggable(option) {
+    draggable(this.container, option);
   }
   draw() {
     const { draw, text } = this.attr();

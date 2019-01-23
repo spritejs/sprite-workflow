@@ -9,6 +9,11 @@ class Base extends BaseNode {
     this.container = new Group();
     this.container.attr({ bgcolor: 'rgba(255,255,255,0.01)', anchor: [ 0.5, 0.5 ], clipOverflow: false });//将group设置成非常小，不影响其他dom，并且不clip内部元素
     this.validatorSchema(attrs);
+    [ 'drag', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop', 'click', 'dblclick', 'mouseenter', 'mouseleave', 'mousemove' ].forEach(evt => { //透传container上的事件
+      this.container.on(evt, (e) => {
+        this.dispatchEvent(evt, e);
+      })
+    })
   }
   validatorSchema(attrs) {
     let curName = this.constructor.name;
@@ -30,6 +35,9 @@ class Base extends BaseNode {
       console.log(schema.default)
       console.groupEnd()
     }
+  }
+  pointCollision() {
+    return true;
   }
   /*保持与spritejs 接口统一 */
   attr(name, value) {

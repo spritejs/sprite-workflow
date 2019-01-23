@@ -30,9 +30,6 @@ class Link extends Base {
     let { startPoint, endPoint, angle, theta } = newAttrs;
     const [ xMin, yMin, xMax, yMax ] = endStep.container.renderBox;
     let linkEndPoint = getIntersectionPoint(endStep.container.renderBox, theta, startPoint, endPoint);
-    if (getPointsDistance(startStep.attr('pos'), linkEndPoint) < 10) {
-      return
-    }
     if (this.$link) {
       this.$link.attr({ points: [ startPoint, linkEndPoint ] });
     }
