@@ -1,7 +1,7 @@
 import { Base } from './base'
 import { Polyline, Triangle } from 'spritejs';
-import { newObj, getLinePoint, getPointsDistance } from './utils'
-import { refreshLink } from './functions'
+import { newObj } from './utils'
+import { refreshLink, getRelativeStep, getIntersectionPoint, getLinePoint, getPointsDistance, getPointInLine } from './functions'
 class Link extends Base {
   constructor(attrs) {
     super(attrs);
@@ -21,23 +21,22 @@ class Link extends Base {
     if (keys.indexOf('startPoint') !== -1 || keys.indexOf('endPoint') !== -1) {
       const { startPoint, endPoint, startOffset, endOffset } = this.attr();
       const r = getPointsDistance(startPoint, endPoint);
-      let linkStartPoint = [ 0, 0 ];
-      let linkEndPoint = [ 0, 0 ];
-      if (r > (startOffset + endOffset)) {
-        linkStartPoint = getLinePoint(startPoint, endPoint, startOffset);
-        linkEndPoint = getLinePoint(endPoint, startPoint, endOffset);
-      }
-      this.dispatchEvent('update', newObj({ linkStartPoint, linkEndPoint }, newAttrs), oldAttrs);
+      let angle = Math.atan2((endPoint[ 1 ] - startPoint[ 1 ]), (endPoint[ 0 ] - startPoint[ 0 ])) //弧度  0.6435011087932844
+      let theta = angle * (180 / Math.PI); //角度  36.86989764584402
+      this.dispatchEvent('update', newObj({ startPoint, endPoint, angle, theta }, newAttrs), oldAttrs);
     }
   }
   update(newAttrs, oldAttrs) {
-    const { linkStartPoint, linkEndPoint } = newAttrs;
+    const endStep = getRelativeStep(this, 'end')[ 0 ];
+    const startStep = getRelativeStep(this, 'start')[ 0 ];
+    let { startPoint, endPoint, angle, theta } = newAttrs;
+    const [ xMin, yMin, xMax, yMax ] = endStep.container.renderBox;
+    let linkEndPoint = getIntersectionPoint(endStep.container.renderBox, theta, startPoint, endPoint);
     if (this.$link) {
-      this.$link.attr({ points: [ linkStartPoint, linkEndPoint ] });
+      this.$link.attr({ points: [ startPoint, linkEndPoint ] });
     }
     if (this.$arrow) {
-      let angle = Math.atan2((linkEndPoint[ 1 ] - linkStartPoint[ 1 ]), (linkEndPoint[ 0 ] - linkStartPoint[ 0 ])) //弧度  0.6435011087932844
-      let theta = angle * (180 / Math.PI); //角度  36.86989764584402
+      let [ x, y ] = linkEndPoint;
       this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
     }
   }
