@@ -8,9 +8,7 @@ class Link extends Base {
     /*属性，相关绘制属性等 */
     this.attr({
       startPoint: [ 0, 0 ],
-      endPoint: [ 0, 0 ],
-      startOffset: 0,
-      endOffset: 0
+      endPoint: [ 0, 0 ]
     })
     this.attr(newObj(attrs));
     this.on('update', this.update);
