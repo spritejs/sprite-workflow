@@ -6,9 +6,9 @@ const height = $wrap.offsetHeight;
 const getGuid = () => Math.random().toString(36).slice(2);
 
 let steps = [
-  { id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 300, 100 ], text: '成功利用漏洞' },
-  { id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 100, 100 ], text: '成功分析' },
-  { id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 200, 200 ], text: '成功处理' }
+  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 300, 100 ], text: '成功利用漏洞' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: 'test' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 200, 200 ], text: '成功处理' }
 ];
 
 let links = [

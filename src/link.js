@@ -1,7 +1,7 @@
 import { Base } from './base'
 import { Polyline, Triangle } from 'spritejs';
 import { newObj } from './utils'
-import { refreshLink, getRelativeStep, getIntersectionPoint, getPointsDistance } from './functions'
+import { refreshLink, getRelativeStep, getDistanceByPoints } from './functions'
 import { _render } from './symbolNames'
 import { linkExtendtion } from './linkExtendtion'
 class Link extends Base {
@@ -22,17 +22,20 @@ class Link extends Base {
     let keys = Object.keys(newAttrs);
     if (keys.indexOf('startPoint') !== -1 || keys.indexOf('endPoint') !== -1) {
       const { startPoint, endPoint, startOffset, endOffset } = this.attr();
-      const r = getPointsDistance(startPoint, endPoint);
+      const r = getDistanceByPoints(startPoint, endPoint);
       let angle = Math.atan2((endPoint[ 1 ] - startPoint[ 1 ]), (endPoint[ 0 ] - startPoint[ 0 ])) //弧度
       let theta = angle * (180 / Math.PI); //角度  
-      this.dispatchEvent('update', newObj({ startPoint, endPoint, angle, theta }, newAttrs), oldAttrs);
+      this.dispatchEvent('update', { newAttrs: newObj({ startPoint, endPoint, angle, theta }, newAttrs), oldAttrs });
     }
   }
-  update(newAttrs, oldAttrs) {
+  update(event) {
+    const { newAttrs, oldAttrs } = event;
     const endStep = this.getLinkSteps('end')[ 0 ];
-    if (endStep.type.indexOf('rect') === 0) {
-      linkExtendtion.update.rect.call(this, newAttrs, oldAttrs)
-    }
+    [ 'rect', 'circle', 'triangle', 'star', 'diamond' ].forEach(type => {
+      if (endStep.drawType.indexOf(type) === 0) {
+        linkExtendtion.update[ type ].call(this, newAttrs, oldAttrs)
+      }
+    })
   }
   /**
    * 获取link相关步骤

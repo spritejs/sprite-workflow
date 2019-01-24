@@ -13,8 +13,8 @@ class Step extends Base {
     this.container.attr({ pos, zIndex: 100 });
     this.draggable();
     /*内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
-    this.type = attrs.type || 'rect';
-    this.draw = linkExtendtion[ this.type ].draw;
+    this.drawType = attrs.drawType || 'rect';
+    this.draw = linkExtendtion[ this.drawType ].draw;
     this.container.on('drag', (e) => {
       this.container.attr({ zIndex: 101 });
       refreshLink(this);

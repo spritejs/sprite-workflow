@@ -67,7 +67,7 @@ function refreshLink(params) { // [steps,links]根据step,link，更新link
  * @param {*} point1 起始点
  * @param {*} points 终点
  */
-function getPointInLine(point1, point2, targetPoint) {
+function getPointByXY(point1, point2, targetPoint) {
   const [ x1, y1 ] = point1;
   const [ x2, y2 ] = point2;
   const [ x, y ] = targetPoint;
@@ -89,7 +89,7 @@ function getPointInLine(point1, point2, targetPoint) {
  * @param {*} point2 直线结束坐标
  * @param {*} d 直线上一点到point1点的距离
  */
-function getLinePoint(point1, point2, d) {
+function getPointByDistance(point1, point2, d) {
   const [ x1, y1 ] = point1;
   const [ x2, y2 ] = point2;
   const r = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
@@ -103,7 +103,7 @@ function getLinePoint(point1, point2, d) {
  * @param {*} point1 起始点
  * @param {*} points 终点
  */
-function getPointsDistance(point1, point2) {
+function getDistanceByPoints(point1, point2) {
   const [ x1, y1 ] = point1;
   const [ x2, y2 ] = point2;
   return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
@@ -121,19 +121,19 @@ function getIntersectionPoint(area, theta, startPoint, endPoint, distance) {
   const [ xMin, yMin, xMax, yMax ] = area;
   let targetY = theta > 0 ? yMin : yMax;
   let targetX = Math.abs(theta) < 90 ? xMin : xMax;
-  let point1 = getPointInLine(startPoint, endPoint, [ targetX ]);
-  let point2 = getPointInLine(startPoint, endPoint, [ , targetY ]);
+  let point1 = getPointByXY(startPoint, endPoint, [ targetX ]);
+  let point2 = getPointByXY(startPoint, endPoint, [ , targetY ]);
   let targetPoint = point1;
   // 相交会有两个点，取到目标点距离小的点
-  if (getPointsDistance(endPoint, point1) > getPointsDistance(endPoint, point2)) {
+  if (getDistanceByPoints(endPoint, point1) > getDistanceByPoints(endPoint, point2)) {
     targetPoint = point2;
   }
   let dist = distance;
   if (getType(distance) !== 'number') {
     dist = 4;
   }
-  targetPoint = getLinePoint(targetPoint, startPoint, dist)
+  targetPoint = getPointByDistance(targetPoint, startPoint, dist)
   return targetPoint;
 }
 
-export { refreshLink, getRelativeStep, getLinePoint, getPointsDistance, getPointInLine, getIntersectionPoint }
+export { refreshLink, getRelativeStep, getPointByDistance, getDistanceByPoints, getPointByXY, getIntersectionPoint }
