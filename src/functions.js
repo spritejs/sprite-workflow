@@ -3,6 +3,7 @@ import { getType } from './utils'
 import { Circle } from 'spritejs';
 import { Step } from './step'
 import { Link } from './link'
+//import { start } from 'repl';
 
 /**
  * 根据传入的link找到相关的step
@@ -109,31 +110,66 @@ function getDistanceByPoints(point1, point2) {
   return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
 
-
 /**
- * 获取连接线与容器的交点坐标
- * @param {*} area // 相交的范围 [ xMin, yMin, xMax, yMax ]
- * @param {*} theta //两个点的角度
- * @param {*} startPoint //目标点，及anchor的位置
- * @param {*} endPoint //第二个点坐标点
+ *判断线段ab与线段cd是否相交，如果相交，返回交点坐标
+ * @param {*} a 线段ab上的a点
+ * @param {*} b
+ * @param {*} c 线段cd上的c点
+ * @param {*} d
  */
-function getIntersectionPoint(area, theta, startPoint, endPoint, distance) {
-  const [ xMin, yMin, xMax, yMax ] = area;
-  let targetY = theta > 0 ? yMin : yMax;
-  let targetX = Math.abs(theta) < 90 ? xMin : xMax;
-  let point1 = getPointByXY(startPoint, endPoint, [ targetX ]);
-  let point2 = getPointByXY(startPoint, endPoint, [ , targetY ]);
-  let targetPoint = point1;
-  // 相交会有两个点，取到目标点距离小的点
-  if (getDistanceByPoints(endPoint, point1) > getDistanceByPoints(endPoint, point2)) {
-    targetPoint = point2;
+function segmentsIntersectionPoint(a, b, c, d) {
+  // 判断每一条线段的两个端点是否都在另一条线段的两侧, 是则求出两条线段所在直线的交点, 否则不相交
+  // 三角形abc 面积的2倍
+  var area_abc = (a[ 0 ] - c[ 0 ]) * (b[ 1 ] - c[ 1 ]) - (a[ 1 ] - c[ 1 ]) * (b[ 0 ] - c[ 0 ]);
+  // 三角形abd 面积的2倍
+  var area_abd = (a[ 0 ] - d[ 0 ]) * (b[ 1 ] - d[ 1 ]) - (a[ 1 ] - d[ 1 ]) * (b[ 0 ] - d[ 0 ]);
+  // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
+  if (area_abc * area_abd >= 0) {
+    return false;
   }
-  let dist = distance;
-  if (getType(distance) !== 'number') {
-    dist = 4;
+  // 三角形cda 面积的2倍
+  var area_cda = (c[ 0 ] - a[ 0 ]) * (d[ 1 ] - a[ 1 ]) - (c[ 1 ] - a[ 1 ]) * (d[ 0 ] - a[ 0 ]);
+  // 三角形cdb 面积的2倍
+  // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
+  var area_cdb = area_cda + area_abc - area_abd;
+  if (area_cda * area_cdb >= 0) {
+    return false;
   }
-  targetPoint = getPointByDistance(targetPoint, startPoint, dist)
-  return targetPoint;
+  //计算交点坐标
+  var t = area_cda / (area_abd - area_abc);
+  var dx = t * (b[ 0 ] - a[ 0 ]),
+    dy = t * (b[ 1 ] - a[ 1 ]);
+  return [ a[ 0 ] + dx, a[ 1 ] + dy ];
+}
+/**
+ * 
+ * @param {*} points polygon的点
+ * @param {*} startPoint 开始点
+ * @param {*} endPoint 结束点
+ * @param {*} distance 偏移量
+ * @param {*} multi 是否返回多个点
+ */
+function getPolygonIntersectionPoint(points, startPoint, endPoint, multi) {
+  let arrRes = [];
+  for (let i = 0; i < points.length; i++) {
+    let res = [];
+    if (i === 0) {
+      res = segmentsIntersectionPoint(points[ points.length - 1 ], points[ 0 ], startPoint, endPoint);
+    } else {
+      res = segmentsIntersectionPoint(points[ i - 1 ], points[ i ], startPoint, endPoint);
+    }
+    if (res) {
+      arrRes.push(res);
+      if (!multi) {
+        break;
+      }
+    }
+  }
+  if (multi) {
+    return arrRes;
+  } else {
+    return arrRes[ 0 ];
+  }
 }
 
-export { refreshLink, getRelativeStep, getPointByDistance, getDistanceByPoints, getPointByXY, getIntersectionPoint }
+export { refreshLink, getRelativeStep, getPointByDistance, getDistanceByPoints, getPointByXY, getPolygonIntersectionPoint }

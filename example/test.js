@@ -6,14 +6,15 @@ const height = $wrap.offsetHeight;
 const getGuid = () => Math.random().toString(36).slice(2);
 
 let steps = [
-  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 300, 100 ], text: '成功利用漏洞' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: 'test' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 200, 200 ], text: '成功处理' }
+  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 300, 100 ], text: '我是矩形' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' }
 ];
 
 let links = [
   { startStepId: steps[ 0 ].id, endStepId: steps[ 1 ].id },
   { startStepId: steps[ 1 ].id, endStepId: steps[ 2 ].id },
+  { startStepId: steps[ 2 ].id, endStepId: steps[ 0 ].id },
 ]
 
 let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });
@@ -34,5 +35,3 @@ links.forEach(object => {
 });
 
 window.workflow = workflow;
-
-//workflow.addStep({ id: getGuid(), data: { a: 1 }, draw: 'rect', pos: [ 200, 100 ] });
