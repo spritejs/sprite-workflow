@@ -46,8 +46,8 @@ const linkExtendtion = {
     },
     triangle: function (newAttrs, oldAttrs) { //圆形框处理剪头指向位置处理
       const endStep = this.getLinkSteps('end')[ 0 ];
-      let { startPoint, endPoint, angle, theta } = newAttrs;
-      const [ xMin, yMin, xMax, yMax ] = endStep.container.renderBox;
+      let { startPoint, endPoint } = newAttrs;
+      const [ xMin, yMin ] = endStep.container.renderBox;
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
       let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint, false);
       if (linkEndPoint) {
