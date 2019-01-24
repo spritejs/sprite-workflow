@@ -4,11 +4,10 @@ import { Base } from './base'
 import { Step } from './step'
 import { Link } from './link'
 import * as spritejs from 'spritejs'
-import { _steps, _links, _workflow } from './symbolNames'
+import { _steps, _links, _workflow, _render } from './symbolNames'
 const { Scene, Layer } = spritejs;
 
 spritejs.use(install);
-
 class SpriteWorkflow extends Base {
   constructor(attrs) {
     super(attrs);
@@ -30,31 +29,18 @@ class SpriteWorkflow extends Base {
     this.stage = scene.layer();
   }
   /**
-   * 绘制步骤和连线
+   * 
+   * @param {sprite} ['Step' 'Link']
    */
-  update() {
-
-  }
-  /**
-   * 添加步骤
-   * @param {step} Step
-   */
-  addStep(step) {
-    step[ _workflow ] = this;
-    this[ _steps ].push(step);
-    let $dom = step.draw();
-    this.stage.append($dom);
-
-  }
-  /**
-   * 添加步骤连线
-   * @param {link} 
-   */
-  addLink(link) {
-    link[ _workflow ] = this;
-    this[ _links ].push(link);
-    let $dom = link.draw();
-    this.stage.append($dom);
+  append(sprite) {
+    if (sprite === undefined) return;
+    sprite[ _workflow ] = this;
+    if (sprite instanceof Step) {
+      this[ _steps ].push(sprite);
+    } else if (sprite instanceof Link) {
+      this[ _links ].push(sprite);
+    }
+    this.stage.append(sprite[ _render ]());
   }
 }
 export { SpriteWorkflow, Link, Step }

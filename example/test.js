@@ -1,4 +1,5 @@
 import { SpriteWorkflow, Link, Step } from '../src/index';
+import { Label } from 'spritejs'
 let $wrap = document.querySelector("#workflow");
 const width = $wrap.offsetWidth;
 const height = $wrap.offsetHeight;
@@ -17,14 +18,20 @@ let links = [
 
 let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });
 steps.forEach(object => {
-  let step = new Step(object);
-  workflow.addStep(step);
+  let step = new Step(object, {
+    // draw: function () {
+    //   const { draw, text } = this.attr();
+    //   let $rect = new Label(text);
+    //   $rect.attr({ bgcolor: 'rgba(0,255,0,0.8)', padding: [ 6, 10 ], borderRadius: [ 5, 5 ] });
+    //   this.append($rect);
+    // }
+  });
+  workflow.append(step);
 })
 links.forEach(object => {
   let link = new Link(object);
-  workflow.addLink(link);
+  workflow.append(link);
 });
-
 
 window.workflow = workflow;
 
