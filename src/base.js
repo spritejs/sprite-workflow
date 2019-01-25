@@ -2,6 +2,7 @@
 import { Group, BaseNode } from 'spritejs'
 import { getType, newObj } from './utils'
 import JSONSchemaValidator from 'q-schema-validator'
+import { Step, Link, SpriteWorkflow } from './index'
 import * as allSchema from './schema/index';
 let attrs = Symbol('attrs');
 class Base extends BaseNode {
@@ -17,9 +18,24 @@ class Base extends BaseNode {
     })
   }
   validatorSchema(attrs) {
-    let curName = this.constructor.name;
-    let schema = allSchema[ curName.toLowerCase() ];
+    let curName = this.constructor.name.toLowerCase();
+    let myClasses = newObj({
+      "step": Step,
+      "link": Link,
+      "spriteworkflow": SpriteWorkflow
+    });
+    let schema = null;
+    let keys = Object.keys(myClasses);
+    for (let i = 0; i < keys.length; i++) {
+      let curKey = keys[ i ];
+      let Klass = myClasses[ curKey ];
+      if (this instanceof Klass) {
+        schema = allSchema[ curKey ];
+        break;
+      }
+    }
     var validator = new JSONSchemaValidator();
+    //console.log(attrs, schema);
     let res = validator.validate(attrs, schema);
     if (res.length) {
       //console.error(`${curName} params validator fail`, '\n error message', res, '\n validator params', attrs)
@@ -33,7 +49,7 @@ class Base extends BaseNode {
       console.log(attrs);
       console.log('\n');
       console.log('%c → validated schema: ↵', 'color:#42b983')
-      console.log(schema.default)
+      console.log(schema)
       console.groupEnd()
     }
   }

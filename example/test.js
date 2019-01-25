@@ -1,4 +1,4 @@
-import { SpriteWorkflow, Link, Step } from '../src/index';
+import { SpriteWorkflow, Link, Step } from '../lib/index';
 import { Label } from 'spritejs'
 let $wrap = document.querySelector("#workflow");
 const width = $wrap.offsetWidth;
