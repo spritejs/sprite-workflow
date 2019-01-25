@@ -10,12 +10,14 @@ let steps = [
   { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
   { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' },
   { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 340, 240 ], text: '五角' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 340, 400 ], text: '菱形' },
 ];
 
 let links = [
   { startStepId: steps[ 0 ].id, endStepId: steps[ 1 ].id },
   { startStepId: steps[ 1 ].id, endStepId: steps[ 2 ].id },
-  { startStepId: steps[ 2 ].id, endStepId: steps[ 3 ].id }
+  { startStepId: steps[ 2 ].id, endStepId: steps[ 3 ].id },
+  { startStepId: steps[ 3 ].id, endStepId: steps[ 4 ].id }
 ]
 
 let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });

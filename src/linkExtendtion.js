@@ -79,6 +79,23 @@ const linkExtendtion = {
           this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
         }
       }
+    },
+    diamond: function (newAttrs, oldAttrs) {
+      const endStep = this.getLinkSteps('end')[ 0 ];
+      let { startPoint, endPoint, theta } = newAttrs;
+      const [ xMin, yMin ] = endStep.container.renderBox;
+      const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
+      let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint, false);
+      if (linkEndPoint) {
+        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
+        if (this.$link) {
+          this.$link.attr({ points: [ startPoint, linkEndPoint ] });
+        }
+        if (this.$arrow) {
+          let [ x, y ] = linkEndPoint;
+          this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
+        }
+      }
     }
   }
 }

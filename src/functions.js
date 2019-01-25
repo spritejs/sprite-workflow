@@ -119,54 +119,29 @@ function getDistanceByPoints(point1, point2) {
  */
 function segmentsIntersectionPoint(a, b, c, d) {
   /** 1 解线性方程组, 求线段交点. **/
-  // 如果分母为0 则平行或共线, 不相交  
-  var denominator = (b[ 1 ] - a[ 1 ]) * (d[ 0 ] - c[ 0 ]) - (a[ 0 ] - b[ 0 ]) * (c[ 1 ] - d[ 1 ]);
-  if (denominator == 0) {
+  // 如果分母为0 则平行或共线, 不相交
+  // 判断每一条线段的两个端点是否都在另一条线段的两侧, 是则求出两条线段所在直线的交点, 否则不相交
+  // 三角形abc 面积的2倍
+  var area_abc = (a[ 0 ] - c[ 0 ]) * (b[ 1 ] - c[ 1 ]) - (a[ 1 ] - c[ 1 ]) * (b[ 0 ] - c[ 0 ]);
+  // 三角形abd 面积的2倍
+  var area_abd = (a[ 0 ] - d[ 0 ]) * (b[ 1 ] - d[ 1 ]) - (a[ 1 ] - d[ 1 ]) * (b[ 0 ] - d[ 0 ]);
+  // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
+  if (area_abc * area_abd >= 0) {
     return false;
   }
-  // 线段所在直线的交点坐标 (x , y)      
-  var x = ((b[ 0 ] - a[ 0 ]) * (d[ 0 ] - c[ 0 ]) * (c[ 1 ] - a[ 1 ])
-    + (b[ 1 ] - a[ 1 ]) * (d[ 0 ] - c[ 0 ]) * a[ 0 ]
-    - (d[ 1 ] - c[ 1 ]) * (b[ 0 ] - a[ 0 ]) * c[ 0 ]) / denominator;
-  var y = -((b[ 1 ] - a[ 1 ]) * (d[ 1 ] - c[ 1 ]) * (c[ 0 ] - a[ 0 ])
-    + (b[ 0 ] - a[ 0 ]) * (d[ 1 ] - c[ 1 ]) * a[ 1 ]
-    - (d[ 0 ] - c[ 0 ]) * (b[ 1 ] - a[ 1 ]) * c[ 1 ]) / denominator;
-
-  /** 2 判断交点是否在两条线段上 **/
-  if (
-    // 交点在线段1上  
-    (x - a[ 0 ]) * (x - b[ 0 ]) <= 0 && (y - a[ 1 ]) * (y - b[ 1 ]) <= 0
-    // 且交点也在线段2上  
-    && (x - c[ 0 ]) * (x - d[ 0 ]) <= 0 && (y - c[ 1 ]) * (y - d[ 1 ]) <= 0
-  ) {
-
-    // 返回交点p  
-    return [ x, y ]
+  // 三角形cda 面积的2倍
+  var area_cda = (c[ 0 ] - a[ 0 ]) * (d[ 1 ] - a[ 1 ]) - (c[ 1 ] - a[ 1 ]) * (d[ 0 ] - a[ 0 ]);
+  // 三角形cdb 面积的2倍
+  // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
+  var area_cdb = area_cda + area_abc - area_abd;
+  if (area_cda * area_cdb >= 0) {
+    return false;
   }
-  //否则不相交  
-  return false
-  // // 判断每一条线段的两个端点是否都在另一条线段的两侧, 是则求出两条线段所在直线的交点, 否则不相交
-  // // 三角形abc 面积的2倍
-  // var area_abc = (a[ 0 ] - c[ 0 ]) * (b[ 1 ] - c[ 1 ]) - (a[ 1 ] - c[ 1 ]) * (b[ 0 ] - c[ 0 ]);
-  // // 三角形abd 面积的2倍
-  // var area_abd = (a[ 0 ] - d[ 0 ]) * (b[ 1 ] - d[ 1 ]) - (a[ 1 ] - d[ 1 ]) * (b[ 0 ] - d[ 0 ]);
-  // // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
-  // if (area_abc * area_abd >= 0) {
-  //   return false;
-  // }
-  // // 三角形cda 面积的2倍
-  // var area_cda = (c[ 0 ] - a[ 0 ]) * (d[ 1 ] - a[ 1 ]) - (c[ 1 ] - a[ 1 ]) * (d[ 0 ] - a[ 0 ]);
-  // // 三角形cdb 面积的2倍
-  // // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
-  // var area_cdb = area_cda + area_abc - area_abd;
-  // if (area_cda * area_cdb >= 0) {
-  //   return false;
-  // }
-  // //计算交点坐标
-  // var t = area_cda / (area_abd - area_abc);
-  // var dx = t * (b[ 0 ] - a[ 0 ]),
-  //   dy = t * (b[ 1 ] - a[ 1 ]);
-  // return [ a[ 0 ] + dx, a[ 1 ] + dy ];
+  //计算交点坐标
+  var t = area_cda / (area_abd - area_abc);
+  var dx = t * (b[ 0 ] - a[ 0 ]),
+    dy = t * (b[ 1 ] - a[ 1 ]);
+  return [ a[ 0 ] + dx, a[ 1 ] + dy ];
 }
 /**
  * 

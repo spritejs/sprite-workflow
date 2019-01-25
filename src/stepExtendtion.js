@@ -27,12 +27,12 @@ const linkExtendtion = {
       //五角星十个顶点的数据坐标，extend-shapes中star坐标有bug
       let $label = new Label(text);
       $label.attr({ pos: [ 20, 30 ], anchor: [ 0, 0 ] })
-      this.$star = new Polygon();
-      this.$star.attr({
+      let $sprite = new Polygon();
+      $sprite.attr({
         points: this.points,
         fillColor: '#0ff'
       });
-      this.append(this.$star);
+      this.append($sprite);
       this.append($label);
     },
   },
@@ -42,13 +42,30 @@ const linkExtendtion = {
       const side = 80; //正三角形边长
       const distance = side / 2 * Math.sqrt(3);
       this.points = [ [ side / 2, 0 ], [ side, distance ], [ 0, distance ] ];
-      let $polygon = new Polygon();
-      $polygon.attr({ points: this.points, fillColor: 'rgba(255,255,0,1)' })
+      let $sprite = new Polygon();
+      $sprite.attr({ points: this.points, fillColor: 'rgba(255,255,0,1)' })
       let $label = new Label(text);
       $label.attr({ pos: [ 40, 40 ], textAlign: 'center', anchor: [ 0.5, 0.5 ] })
-      this.append($polygon);
+      this.append($sprite);
       this.append($label);
     },
   },
+  'diamond': {
+    draw: function () {
+      const { draw, text } = this.attr();
+      const side = 30;
+      this.points = [ [ 0, side ], [ side * Math.sqrt(3), 0 ], [ side * 2 * Math.sqrt(3), side ], [ side * Math.sqrt(3), side * 2 ] ];
+      //五角星十个顶点的数据坐标，extend-shapes中star坐标有bug
+      let $label = new Label(text);
+      $label.attr({ pos: [ side * Math.sqrt(3), 20 ], anchor: [ 0.5, 0 ] })
+      this.$sprite = new Polygon();
+      this.$sprite.attr({
+        points: this.points,
+        fillColor: '#f0f'
+      });
+      this.append(this.$sprite);
+      this.append($label);
+    }
+  }
 }
 export { linkExtendtion }
