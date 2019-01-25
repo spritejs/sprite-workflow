@@ -9,7 +9,7 @@ let steps = [
   { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 300, 100 ], text: '我是矩形' },
   { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
   { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 300, 300 ], text: '五角' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 340, 240 ], text: '五角' },
 ];
 
 let links = [
