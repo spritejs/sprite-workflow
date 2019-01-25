@@ -8,13 +8,14 @@ const getGuid = () => Math.random().toString(36).slice(2);
 let steps = [
   { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 300, 100 ], text: '我是矩形' },
   { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' }
+  { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 300, 300 ], text: '五角' },
 ];
 
 let links = [
   { startStepId: steps[ 0 ].id, endStepId: steps[ 1 ].id },
   { startStepId: steps[ 1 ].id, endStepId: steps[ 2 ].id },
-  { startStepId: steps[ 2 ].id, endStepId: steps[ 0 ].id },
+  { startStepId: steps[ 2 ].id, endStepId: steps[ 3 ].id }
 ]
 
 let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });

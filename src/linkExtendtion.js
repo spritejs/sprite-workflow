@@ -44,9 +44,34 @@ const linkExtendtion = {
         this.$arrow.attr({ pos: linkEndPoint, rotate: theta + (180 - 22.5) })
       }
     },
+    star: function (newAttrs, oldAttrs) {
+      const endStep = this.getLinkSteps('end')[ 0 ];
+      let { startPoint, endPoint, angle, theta } = newAttrs;
+      const [ xMin, yMin, xMax, yMax ] = endStep.container.renderBox;
+      // const dx = (xMax - xMin) / 2;//五角星points相对的坐标中心为[dx,dy]而不是[0,0]
+      // const dy = (yMax - yMin) / 2;
+      const points = endStep.points;
+      //console.log(dx, dy, xMin, yMin);
+      //console.log(JSON.stringify(points));
+      //已下计算与star的extend-shapes具体实现有关，目前计算star相对于父坐标系的坐标方法如下
+      const realPoints = points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
+      let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint, false);
+
+      //linkEndPoint = linkEndPoint[ linkEndPoint.length - 1 ];
+      if (linkEndPoint) {
+        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
+        if (this.$link) {
+          this.$link.attr({ points: [ startPoint, linkEndPoint ] });
+        }
+        if (this.$arrow) {
+          let [ x, y ] = linkEndPoint;
+          this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
+        }
+      }
+    },
     triangle: function (newAttrs, oldAttrs) { //圆形框处理剪头指向位置处理
       const endStep = this.getLinkSteps('end')[ 0 ];
-      let { startPoint, endPoint } = newAttrs;
+      let { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.container.renderBox;
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
       let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint, false);

@@ -36,6 +36,6 @@
   "dependencies": {
     "q-schema-validator": "0.0.3",
     "sprite-draggable": "0.0.13",
-    "sprite-extend-shapes": "^0.1.49"
+    "sprite-extend-shapes": "^0.1.51"
   }
 }
