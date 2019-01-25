@@ -2,6 +2,7 @@
 import { Group, BaseNode } from 'spritejs'
 import { getType, newObj } from './utils'
 import JSONSchemaValidator from 'q-schema-validator'
+import * as allSchema from './schema/index';
 let attrs = Symbol('attrs');
 class Base extends BaseNode {
   constructor(attrs) {
@@ -17,9 +18,9 @@ class Base extends BaseNode {
   }
   validatorSchema(attrs) {
     let curName = this.constructor.name;
-    let schema = require("./schema/" + curName.toLowerCase() + ".json.js");
+    let schema = allSchema[ curName.toLowerCase() ];
     var validator = new JSONSchemaValidator();
-    let res = validator.validate(attrs, schema.default);
+    let res = validator.validate(attrs, schema);
     if (res.length) {
       //console.error(`${curName} params validator fail`, '\n error message', res, '\n validator params', attrs)
       console.groupCollapsed('%c♥ %s params validation fail', "color: red", curName);
