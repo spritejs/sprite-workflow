@@ -18,7 +18,8 @@
   workflow design tools
   <div id="workflow"></div>
   <script src="https://unpkg.com/spritejs/dist/spritejs.min.js"></script>
-  <script src="https://unpkg.com/sprite-workflow/lib/index.js"></script>
+  <!-- <script src="https://unpkg.com/sprite-workflow/lib/index.js"></script> -->
+  <script src="sprite-workflow.js"></script>
   <script>
     const { Workflow, Link, Step } = spriteWorkflow;
     const { Label } = spritejs;
@@ -46,10 +47,10 @@
     steps.forEach(object => {
       let step = new Step(object, {
         // draw: function () {
-        //   const { draw, text } = this.attr();
-        //   let $rect = new Label(text);
-        //   $rect.attr({ bgcolor: 'rgba(0,255,0,0.8)', padding: [ 6, 10 ], borderRadius: [ 5, 5 ] });
-        //   this.append($rect);
+        // const { draw, text } = this.attr();
+        // let $rect = new Label(text);
+        // $rect.attr({ bgcolor: 'rgba(0,255,0,0.8)', padding: [ 6, 10 ], borderRadius: [ 5, 5 ] });
+        // this.append($rect);
         // }
       });
       workflow.append(step);

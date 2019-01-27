@@ -13,10 +13,15 @@ module.exports = function (env = {}) {
   const externals = {};
   return {
     mode: 'development',
-    entry: './example/test',
     devtool: 'inline-source-map',
+    entry: {
+      "sprite-workflow": path.resolve(__dirname, './src/index')
+    },
     output: {
-      libraryTarget: "umd"
+      // path: path.resolve(__dirname, '/'),
+      // filename: '[name].js',
+      library: 'spriteWorkflow',
+      libraryTarget: 'umd'
     },
     module: {
       rules: [
@@ -42,7 +47,7 @@ module.exports = function (env = {}) {
 
     plugins: [
       new HTMLPlugin({
-        filename: 'main',
+        //filename: 'spriteWorkflow',
         template: './example/test.html',
         inject: false
       }),
