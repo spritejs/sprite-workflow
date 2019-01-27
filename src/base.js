@@ -2,7 +2,7 @@
 import { Group, BaseNode } from 'spritejs'
 import { getType, newObj } from './utils'
 import JSONSchemaValidator from 'q-schema-validator'
-import { Step, Link, SpriteWorkflow } from './index'
+import { Step, Link, Workflow } from './index'
 import * as allSchema from './schema/index';
 let attrs = Symbol('attrs');
 class Base extends BaseNode {
@@ -22,7 +22,7 @@ class Base extends BaseNode {
     let myClasses = newObj({
       "step": Step,
       "link": Link,
-      "spriteworkflow": SpriteWorkflow
+      "workflow": Workflow
     });
     let schema = null;
     let keys = Object.keys(myClasses);

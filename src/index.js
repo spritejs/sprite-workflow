@@ -8,7 +8,7 @@ import { _steps, _links, _workflow, _render } from './symbolNames'
 const { Scene, Layer } = spritejs;
 
 spritejs.use(install);
-class SpriteWorkflow extends Base {
+class Workflow extends Base {
   constructor(attrs) {
     super(attrs);
     /*****
@@ -43,4 +43,4 @@ class SpriteWorkflow extends Base {
     this.stage.append(sprite[ _render ]());
   }
 }
-export { SpriteWorkflow, Link, Step }
+export { Workflow, Link, Step }

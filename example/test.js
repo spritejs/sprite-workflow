@@ -1,4 +1,4 @@
-import { SpriteWorkflow, Link, Step } from '../lib/index';
+import { Workflow, Link, Step } from '../lib/index';
 import { Label } from 'spritejs'
 let $wrap = document.querySelector("#workflow");
 const width = $wrap.offsetWidth;
@@ -20,7 +20,7 @@ let links = [
   { startStepId: steps[ 3 ].id, endStepId: steps[ 4 ].id }
 ]
 
-let workflow = new SpriteWorkflow({ selector: '#workflow', size: [ width, height ] });
+let workflow = new Workflow({ selector: '#workflow', size: [ width, height ] });
 steps.forEach(object => {
   let step = new Step(object, {
     // draw: function () {
