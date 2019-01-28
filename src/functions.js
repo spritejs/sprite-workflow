@@ -89,12 +89,12 @@ function getPointByXY(point1, point2, targetPoint) {
  * @param {*} point2 直线结束坐标
  * @param {*} d 直线上一点到point1点的距离
  */
-function getPointByDistance(point1, point2, d) {
+function getPointByDistance(point1, point2, distance) {
   const [ x1, y1 ] = point1;
   const [ x2, y2 ] = point2;
   const r = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-  const x = (d * (x2 - x1)) / r + x1;
-  const y = (d * (y2 - y1)) / r + y1;
+  const x = (distance * (x2 - x1)) / r + x1;
+  const y = (distance * (y2 - y1)) / r + y1;
   return [ x, y ];
 }
 
@@ -117,8 +117,6 @@ function getDistanceByPoints(point1, point2) {
  * @param {*} d
  */
 function segmentsIntersectionPoint(a, b, c, d) {
-  /** 1 解线性方程组, 求线段交点. **/
-  // 如果分母为0 则平行或共线, 不相交
   // 判断每一条线段的两个端点是否都在另一条线段的两侧, 是则求出两条线段所在直线的交点, 否则不相交
   // 三角形abc 面积的2倍
   var area_abc = (a[ 0 ] - c[ 0 ]) * (b[ 1 ] - c[ 1 ]) - (a[ 1 ] - c[ 1 ]) * (b[ 0 ] - c[ 0 ]);
@@ -143,14 +141,13 @@ function segmentsIntersectionPoint(a, b, c, d) {
   return [ a[ 0 ] + dx, a[ 1 ] + dy ];
 }
 /**
- * 
+ *求多边形与边与线段的交点坐标
  * @param {*} points polygon的点
  * @param {*} startPoint 开始点
  * @param {*} endPoint 结束点
- * @param {*} distance 偏移量
  * @param {*} multi 是否返回多个点
  */
-function getPolygonIntersectionPoint(points, startPoint, endPoint, multi) {
+function getPolygonIntersectionPoint(points, startPoint, endPoint, multi = false) {
   let arrRes = [];
   for (let i = 0; i < points.length; i++) {
     let res = [];
@@ -173,4 +170,4 @@ function getPolygonIntersectionPoint(points, startPoint, endPoint, multi) {
   }
 }
 
-export { refreshLink, getRelativeStep, getPointByDistance, getDistanceByPoints, getPointByXY, getPolygonIntersectionPoint }
+export { refreshLink, getRelativeStep, getPointByDistance, getPolygonIntersectionPoint }

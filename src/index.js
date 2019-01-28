@@ -5,6 +5,7 @@ import { Step } from './step'
 import { Link } from './link'
 import * as spritejs from 'spritejs'
 import { _steps, _links, _workflow, _render } from './symbolNames'
+import * as functions from './functions'
 const { Scene, Layer } = spritejs;
 
 spritejs.use(install);
@@ -21,12 +22,14 @@ class Workflow extends Base {
     }, attrs));
     const { selector, size } = this.attr();
     const scene = new Scene(selector, {
-      viewport: this.attr('size'),
+      viewport: size,
       displayRatio: 'auto'
     })
     this[ _steps ] = [];
     this[ _links ] = [];
     this.stage = scene.layer();
+    delete this.renderBox;
+    delete this.sizeBox;
   }
   /**
    * 
@@ -44,4 +47,4 @@ class Workflow extends Base {
     sprite.dispatchEvent('mounted', {});
   }
 }
-export { Workflow, Link, Step }
+export { Workflow, Link, Step, functions }
