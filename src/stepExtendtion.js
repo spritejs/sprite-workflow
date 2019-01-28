@@ -55,7 +55,6 @@ const linkExtendtion = {
       const { draw, text } = this.attr();
       const side = 30;
       this.points = [ [ 0, side ], [ side * Math.sqrt(3), 0 ], [ side * 2 * Math.sqrt(3), side ], [ side * Math.sqrt(3), side * 2 ] ];
-      //五角星十个顶点的数据坐标，extend-shapes中star坐标有bug
       let $label = new Label(text);
       $label.attr({ pos: [ side * Math.sqrt(3), 20 ], anchor: [ 0.5, 0 ] })
       this.$sprite = new Polygon();

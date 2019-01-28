@@ -1,8 +1,8 @@
-import { Polyline, Triangle } from 'spritejs'
-import { getIntersectionPoint, getPointByDistance, getPolygonIntersectionPoint } from './functions'
+import { Polyline, Triangle, Circle } from 'spritejs'
+import { getIntersectionPoint, getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints } from './functions'
 const linkExtendtion = {
   'draw': {
-    default: function () {
+    line: function () {//直线直接连接
       this.$link = new Polyline();
       this.$arrow = new Triangle();
       const { startPoint, endPoint } = this.attr();
@@ -10,6 +10,31 @@ const linkExtendtion = {
       this.$arrow.attr({ color: '#ccc', pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: '#ccc' })
       this.append(this.$link);
       this.append(this.$arrow);
+    },
+    polyline: function () { //折线连接
+      this.$link = new Polyline();
+      this.$arrow = new Triangle();
+      const { startPoint, endPoint } = this.attr();
+      let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
+      if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
+        insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
+      }
+      this.$link.attr({ points: [ startPoint, insertPoint, endPoint ], lineWidth: 2, color: '#eee', bgcolor: '#f00' });
+      this.$arrow.attr({ color: '#ccc', pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: '#ccc' })
+      this.append(this.$link);
+      this.append(this.$arrow);
+    }
+  },
+  'attrUpdate': function (points, theta) {
+    if (points && points.length) {
+      if (this.$link) {
+        this.$link.attr({ points: points });
+      }
+      if (this.$arrow) {
+        let endPoint = points[ points.length - 1 ];
+        let [ x, y ] = endPoint;
+        this.$arrow.attr({ pos: [ endPoint[ 0 ], endPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
+      }
     }
   },
   'update': {
@@ -18,16 +43,10 @@ const linkExtendtion = {
       const { startPoint, endPoint, angle, theta } = newAttrs;
       const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
       const points = [ [ xMin, yMin ], [ xMax, yMin ], [ xMax, yMax ], [ xMin, yMax ] ];
-      let linkEndPoint = getPolygonIntersectionPoint(points, startPoint, endPoint);
-      if (linkEndPoint) {
-        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
-        if (this.$link) {
-          this.$link.attr({ points: [ startPoint, linkEndPoint ] });
-        }
-        if (this.$arrow) {
-          let [ x, y ] = linkEndPoint;
-          this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
-        }
+      if (this.drawType === 'line') {
+        updatePolygonByline.call(this, points, startPoint, endPoint, theta);
+      } else {
+        updatePolygonByPolyline.call(this, points, startPoint, endPoint)
       }
     },
     circle: function (newAttrs, oldAttrs) { //圆形框处理剪头指向位置处理
@@ -35,13 +54,20 @@ const linkExtendtion = {
       const { startPoint, endPoint, angle, theta } = newAttrs;
       const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
       const r = Math.max(xMax - xMin, yMin - yMax) / 2;
-      let linkEndPoint = getPointByDistance(endPoint, startPoint, r + 4) //4为保护距离到实际点的空隙
-      if (this.$link) {
-        this.$link.attr({ points: [ startPoint, linkEndPoint ] });
-      }
-      if (this.$arrow) {
-        let [ x, y ] = linkEndPoint;
-        this.$arrow.attr({ pos: linkEndPoint, rotate: theta + (180 - 22.5) })
+      if (this.drawType === 'line') {
+        let linkEndPoint = getPointByDistance(endPoint, startPoint, r) //4为保护距离到实际点的空隙
+        if (linkEndPoint) {
+          linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
+          linkExtendtion.attrUpdate.call(this, [ startPoint, linkEndPoint ], theta);
+        }
+      } else {
+        let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
+        if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
+          insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
+        }
+        let linkEndPoint = getPointByDistance(endPoint, insertPoint, r + 4) //4为保护距离到实际点的空隙
+        const { theta } = getAngleByPoints(insertPoint, linkEndPoint);
+        linkExtendtion.attrUpdate.call(this, [ startPoint, insertPoint, linkEndPoint ], theta);
       }
     },
     star: function (newAttrs, oldAttrs) {
@@ -49,18 +75,11 @@ const linkExtendtion = {
       let { startPoint, endPoint, angle, theta } = newAttrs;
       const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
       const points = endStep.points;
-      //已下计算与star的extend-shapes具体实现有关，目前计算star相对于父坐标系的坐标方法如下
       const realPoints = points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint);
-      if (linkEndPoint) {
-        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
-        if (this.$link) {
-          this.$link.attr({ points: [ startPoint, linkEndPoint ] });
-        }
-        if (this.$arrow) {
-          let [ x, y ] = linkEndPoint;
-          this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
-        }
+      if (this.drawType === 'line') {
+        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
+      } else {
+        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
       }
     },
     triangle: function (newAttrs, oldAttrs) { //圆形框处理剪头指向位置处理
@@ -68,16 +87,10 @@ const linkExtendtion = {
       const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.renderBox;
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint);
-      if (linkEndPoint) {
-        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
-        if (this.$link) {
-          this.$link.attr({ points: [ startPoint, linkEndPoint ] });
-        }
-        if (this.$arrow) {
-          let [ x, y ] = linkEndPoint;
-          this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
-        }
+      if (this.drawType === 'line') {
+        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
+      } else {
+        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
       }
     },
     diamond: function (newAttrs, oldAttrs) {
@@ -85,18 +98,31 @@ const linkExtendtion = {
       const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.renderBox;
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      let linkEndPoint = getPolygonIntersectionPoint(realPoints, startPoint, endPoint);
-      if (linkEndPoint) {
-        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
-        if (this.$link) {
-          this.$link.attr({ points: [ startPoint, linkEndPoint ] });
-        }
-        if (this.$arrow) {
-          let [ x, y ] = linkEndPoint;
-          this.$arrow.attr({ pos: [ linkEndPoint[ 0 ], linkEndPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
-        }
+      if (this.drawType === 'line') {
+        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
+      } else {
+        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
       }
     }
+  }
+}
+function updatePolygonByline(points, startPoint, endPoint, theta) {
+  let linkEndPoint = getPolygonIntersectionPoint(points, startPoint, endPoint);
+  if (linkEndPoint) {
+    linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
+    linkExtendtion.attrUpdate.call(this, [ startPoint, linkEndPoint ], theta);
+  }
+}
+function updatePolygonByPolyline(points, startPoint, endPoint) {
+  let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
+  if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
+    insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
+  }
+  let linkEndPoint = getPolygonIntersectionPoint(points, insertPoint, endPoint);
+  if (linkEndPoint) {
+    linkEndPoint = getPointByDistance(linkEndPoint, insertPoint, 4);
+    const { theta } = getAngleByPoints(insertPoint, linkEndPoint);
+    linkExtendtion.attrUpdate.call(this, [ startPoint, insertPoint, linkEndPoint ], theta);
   }
 }
 export { linkExtendtion }

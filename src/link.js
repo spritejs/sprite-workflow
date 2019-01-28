@@ -1,7 +1,7 @@
 import { Base } from './base'
 import { Polyline, Triangle } from 'spritejs';
 import { newObj } from './utils'
-import { refreshLink, getRelativeStep } from './functions'
+import { refreshLink, getRelativeStep, getAngleByPoints } from './functions'
 import { _render } from './symbolNames'
 import { linkExtendtion } from './linkExtendtion'
 class Link extends Base {
@@ -15,15 +15,15 @@ class Link extends Base {
     this.attr(newObj(attrs));
     this.on('update', this.update);
     //读取默认link绘制方
-    this.draw = linkExtendtion.draw.default;
+    this.drawType = attrs.drawType || 'line';
+    this.draw = linkExtendtion.draw[ this.drawType ];
   }
   attrUpdate(newAttrs, oldAttrs) {
     let needFreshLink = false;
     let keys = Object.keys(newAttrs);
     if (keys.indexOf('startPoint') !== -1 || keys.indexOf('endPoint') !== -1) {
       const { startPoint, endPoint, startOffset, endOffset } = this.attr();
-      let angle = Math.atan2((endPoint[ 1 ] - startPoint[ 1 ]), (endPoint[ 0 ] - startPoint[ 0 ])) //弧度
-      let theta = angle * (180 / Math.PI); //角度
+      const { angle, theta } = getAngleByPoints(startPoint, endPoint);
       this.dispatchEvent('update', { newAttrs: newObj({ startPoint, endPoint, angle, theta }, newAttrs), oldAttrs });
     }
   }
