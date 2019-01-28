@@ -10,16 +10,19 @@ class Step extends Base {
     super(attrs);
     this.attr(newObj({ anchorOffset: [ 0, 0 ] }, attrs));//anchorOffset连线的点，默认Step的anchor点，渲染的时候，会设置这个点
     const { pos } = attrs;
-    this.container.attr({ pos, zIndex: 100 });
+    this.container.attr({ pos, zIndex: 100, size: [ 0.01, 0.01 ] });
     this.draggable();
     /*内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
     this.drawType = attrs.drawType || 'rect';
     this.draw = linkExtendtion[ this.drawType ].draw;
-    this.container.on('drag', (e) => {
+    this.on('dragstart', (e) => {
+      this.container.attr({ zIndex: 101 });
+    });
+    this.on('drag', (e) => {
       this.container.attr({ zIndex: 101 });
       refreshLink(this);
     });
-    this.container.on('dragend', (e) => {
+    this.on('dragend', (e) => {
       this.container.attr({ zIndex: 100 });
     });
     // 如果外部重写draw方法，用外部方法覆盖,并将step的类型设置成custom

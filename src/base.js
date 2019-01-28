@@ -8,6 +8,8 @@ let attrs = Symbol('attrs');
 class Base extends BaseNode {
   constructor(attrs) {
     super();
+    this.sizeBox = [ 0, 0, 0, 0 ]; //group内部大小
+    this.renderBox = [ 0, 0, 0, 0 ] //对于外接容器大小
     this.container = new Group();
     this.container.attr({ bgcolor: 'rgba(255,255,255,0.01)', anchor: [ 0.5, 0.5 ], clipOverflow: false });//将group设置成非常小，不影响其他dom，并且不clip内部元素
     this.validatorSchema(attrs);
@@ -15,6 +17,14 @@ class Base extends BaseNode {
       this.container.on(evt, (e) => {
         this.dispatchEvent(evt, e);
       })
+    });
+
+    this.on('mounted', this.mounted);
+
+    // 拖动的时候，修改renderBox
+    this.on('drag', () => {
+      const [ oX, oY ] = this.container.renderBox;
+      this.renderBox = [ oX + this.sizeBox[ 0 ], oY + this.sizeBox[ 1 ], oX + this.sizeBox[ 2 ], oY + this.sizeBox[ 3 ] ];
     })
   }
   validatorSchema(attrs) {
@@ -35,10 +45,8 @@ class Base extends BaseNode {
       }
     }
     var validator = new JSONSchemaValidator();
-    //console.log(attrs, schema);
     let res = validator.validate(attrs, schema);
     if (res.length) {
-      //console.error(`${curName} params validator fail`, '\n error message', res, '\n validator params', attrs)
       console.groupCollapsed('%c♥ %s params validation fail', "color: red", curName);
       console.log('%c → validated message: ↵', 'color:#42b983')
       res.forEach(item => {
@@ -79,6 +87,22 @@ class Base extends BaseNode {
     } else {
       this.container.append(sprites)
     }
+  }
+  mounted() {//渲染后，重新计算renderBox
+    let [ xMin, yMin, xMax, yMax ] = this.sizeBox;
+    this.renderBox = this.container.renderBox;
+    const [ oX, oY ] = this.renderBox;
+    if (this.container.children.length > 0) {
+      this.container.children.forEach(sprite => {
+        const renderBox = sprite.renderBox;
+        xMin = Math.min(xMin, renderBox[ 0 ]);
+        yMin = Math.min(yMin, renderBox[ 1 ]);
+        xMax = Math.max(xMax, renderBox[ 2 ]);
+        yMax = Math.max(yMax, renderBox[ 3 ]);
+      })
+    }
+    this.sizeBox = [ xMin, yMin, xMax, yMax ];
+    this.renderBox = [ oX + xMin, oY + yMin, oX + xMax, oY + yMax ];
   }
 }
 export { Base }

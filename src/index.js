@@ -41,6 +41,7 @@ class Workflow extends Base {
       this[ _links ].push(sprite);
     }
     this.stage.append(sprite[ _render ]());
+    sprite.dispatchEvent('mounted', {});
   }
 }
 export { Workflow, Link, Step }

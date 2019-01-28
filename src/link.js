@@ -24,7 +24,7 @@ class Link extends Base {
       const { startPoint, endPoint, startOffset, endOffset } = this.attr();
       const r = getDistanceByPoints(startPoint, endPoint);
       let angle = Math.atan2((endPoint[ 1 ] - startPoint[ 1 ]), (endPoint[ 0 ] - startPoint[ 0 ])) //弧度
-      let theta = angle * (180 / Math.PI); //角度  
+      let theta = angle * (180 / Math.PI); //角度
       this.dispatchEvent('update', { newAttrs: newObj({ startPoint, endPoint, angle, theta }, newAttrs), oldAttrs });
     }
   }
@@ -47,7 +47,7 @@ class Link extends Base {
   [ _render ]() {
     this.draw();
     //link的container容器高宽为0，原始坐标为[0,0],内部元素的坐标相对世界坐标，group只起打包作用
-    this.container.attr({ bgcolor: 'rgba(255,0,0,1)', size: [ 0.1, 0.1 ] })
+    this.container.attr({ bgcolor: 'rgba(255,0,0,1)', size: [ 0.01, 0.01 ] })
     refreshLink(this);
     return this.container;
   }
