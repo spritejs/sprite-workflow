@@ -5,13 +5,13 @@ export default [
     component: () => import('./index.md')
   },
   {
-    title: '介绍',
-    path: 'pie',
-    component: () => import('./pages/pie.md')
+    title: '安装',
+    path: 'install',
+    component: () => import('./pages/install.md')
   },
   {
     title: '开始',
-    path: 'pie1',
-    component: () => import('./pages/rose.md')
+    path: 'pie',
+    component: () => import('./pages/start.md')
   }
 ]

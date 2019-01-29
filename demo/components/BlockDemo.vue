@@ -34,10 +34,9 @@ export default {
 
   mounted() {
     this.initEditor();
-
     try {
       if ((this.isJSON = this.tip.includes("json"))) {
-        eval(window.QCharts.compile(this.source));
+        eval(window.spriteWorkflow.compile(this.source));
       } else {
         eval(this.unescape(this.source));
       }
@@ -93,7 +92,7 @@ export default {
               }
 
               this.isJSON
-                ? eval(window.QCharts.compile(editor.getValue()))
+                ? eval(window.spriteWorkflow.compile(editor.getValue()))
                 : eval(editor.getValue());
             } catch (e) {
               throw e;
@@ -112,7 +111,7 @@ export default {
 .block-demo {
   position: relative;
   border: 1px solid #ebebeb;
-  height: 400px;
+  height: 500px;
   margin-top: 1.2em;
 
   box-sizing: border-box;

@@ -15,12 +15,10 @@ module.exports = {
           },
           // 将捕获的代码块装进自定义组件block-demo中
           render(tokens, idx) {
-            if (tokens[idx].nesting === 1) {
-              let tip = tokens[idx].info
+            if (tokens[ idx ].nesting === 1) {
+              let tip = tokens[ idx ].info
               tip = tip.replace('demo', '').trim()
-
-              let source = tokens[idx + 1].content
-
+              let source = tokens[ idx + 1 ].content
               return `<block-demo tip="${md.render(tip)}" source="${escape(
                 source
               )}">`
@@ -33,7 +31,7 @@ module.exports = {
     afterProcess(vueFile) {
       // 移除注释
       return vueFile
-        .replace(/<span class="hljs-comment">([\S\s]*?)<\/span>/gi, '')
+        // .replace(/<span class="hljs-comment">([\S\s]*?)<\/span>/gi, '')
         .trim()
     },
     afterProcessLiveTemplate(template) {

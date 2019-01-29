@@ -5,8 +5,8 @@ import { Link } from './link'
 import * as spritejs from 'spritejs'
 import { _steps, _links, _workflow, _render } from './symbolNames'
 import * as functions from './functions'
-const { Scene } = spritejs;
 
+const { Scene } = spritejs;
 spritejs.use(install);
 class Workflow extends Base {
   constructor(attrs) {
