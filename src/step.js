@@ -8,7 +8,7 @@ import { linkExtendtion } from './stepExtendtion'
 class Step extends Base {
   constructor(attrs, option) {
     super(attrs);
-    this.attr(newObj({ anchorOffset: [ 0, 0 ] }, attrs));//anchorOffset连线的点，默认Step的anchor点，渲染的时候，会设置这个点
+    this.attr(newObj(attrs));
     const { pos } = attrs;
     this.container.attr({ pos, zIndex: 100 });
     this.draggable();

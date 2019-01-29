@@ -7,9 +7,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "build": "webpack --config ./webpack.config.prod.js",
+    "build": "webpack --config ./build/webpack.config.prod.js",
     "standalone": "babel src -d lib && webpack --env.standalone",
-    "start": "webpack-dev-server --config ./webpack.config.js",
+    "start": "webpack-dev-server --config ./build/webpack.config.js",
     "prepublishOnly": "npm run build",
     "lint": "eslint ./ --fix"
   },

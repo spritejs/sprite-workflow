@@ -4,9 +4,9 @@ const webpack = require('webpack');
 const HTMLPlugin = require('html-webpack-plugin')
 
 let babelConf;
-if (fs.existsSync('./.babelrc')) {
+if (fs.existsSync('../.babelrc')) {
   // use babel
-  babelConf = JSON.parse(fs.readFileSync('.babelrc'));
+  babelConf = JSON.parse(fs.readFileSync('../.babelrc'));
 }
 
 module.exports = function (env = {}) {
@@ -15,7 +15,7 @@ module.exports = function (env = {}) {
     mode: 'development',
     devtool: 'inline-source-map',
     entry: {
-      "sprite-workflow": path.resolve(__dirname, './src/index')
+      "sprite-workflow": path.resolve(__dirname, '../src/index')
     },
     output: {
       // path: path.resolve(__dirname, '/'),
@@ -38,7 +38,7 @@ module.exports = function (env = {}) {
     //stats: 'errors-only',
 
     devServer: {
-      contentBase: path.join(__dirname, 'example'),
+      contentBase: path.join(__dirname, '../example'),
       compress: true,
       port: 3001,
       hot: true,
@@ -46,11 +46,11 @@ module.exports = function (env = {}) {
     },
 
     plugins: [
-      new HTMLPlugin({
-        //filename: 'spriteWorkflow',
-        template: './example/test.html',
-        inject: false
-      }),
+      // new HTMLPlugin({
+      //   //filename: 'spriteWorkflow',
+      //   template: '../example/test.html',
+      //   inject: false
+      // }),
       new webpack.NamedModulesPlugin(),
       new webpack.HotModuleReplacementPlugin()
     ],

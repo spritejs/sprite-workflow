@@ -6,7 +6,6 @@ import { Link } from './link'
 import * as spritejs from 'spritejs'
 import { _steps, _links, _workflow, _render } from './symbolNames'
 import * as functions from './functions'
-import { timingSafeEqual } from 'crypto';
 const { Scene, Layer, Group } = spritejs;
 
 spritejs.use(install);
@@ -41,6 +40,14 @@ class Workflow extends Base {
     delete this.renderBox;
     delete this.sizeBox;
   }
+
+  // 获取workflow的steps与links
+  get children() {
+    return {
+      steps: this[ _steps ],
+      links: this[ _links ]
+    }
+  }
   /**
    * workflow添加子对象 step link
    * @param {sprite} ['Step' 'Link']
@@ -62,6 +69,9 @@ function zoom(layer, group) {
   let startX, startY;
   let draged = false;
   layer.on('mousedown', (e) => {
+    if (e.originalEvent.which === 3) {
+      return;
+    }
     let $target = e.target;
     if ($target === layer || $target === group) {
       oX = e.offsetX;
@@ -71,7 +81,6 @@ function zoom(layer, group) {
     }
   });
   layer.on('mousemove', (e) => {
-    let $target = e.target;
     if (draged) {
       let dx = e.offsetX - oX;
       let dy = e.offsetY - oY;
