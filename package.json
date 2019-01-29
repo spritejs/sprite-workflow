@@ -11,6 +11,7 @@
     "standalone": "babel src -d lib && webpack --env.standalone",
     "start": "webpack-dev-server --config ./build/webpack.config.dev.js",
     "demo": "webpack-dev-server --config ./build/webpack.conf.demo.js --color --progress",
+    "docs": "rimraf docs && cross-env NODE_ENV=production webpack --config ./build/webpack.conf.prod.docs.js",
     "prepublishOnly": "npm run build",
     "lint": "eslint ./ --fix"
   },

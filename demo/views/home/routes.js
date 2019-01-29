@@ -1,10 +1,17 @@
-// import PieRoutes from './pie/routes'
-
 export default [
   {
-    title: '饼图',
+    title: '简介',
+    path: '',
+    component: () => import('./index.md')
+  },
+  {
+    title: '介绍',
     path: 'pie',
-    component: () => import('./pie/index.vue'),
-    // children: PieRoutes
+    component: () => import('./pages/pie.md')
+  },
+  {
+    title: '开始',
+    path: 'pie1',
+    component: () => import('./pages/rose.md')
   }
 ]

@@ -3,7 +3,7 @@
     <div class="logo">
       <router-link to="/">
         <h2>
-          <span>sprite-workflow</span>
+          <span>Workflow</span>
         </h2>
       </router-link>
     </div>
