@@ -1,22 +1,22 @@
 export default {
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "sprite workflow schema",
-  "description": "Schema of sprite workflow",
-  "type": "object",
-  "properties": {
-    "selector": {
-      "type": "string"
+  '$schema': 'http://json-schema.org/draft-04/schema#',
+  'title': 'sprite workflow schema',
+  'description': 'Schema of sprite workflow',
+  'type': 'object',
+  'properties': {
+    'selector': {
+      'type': 'string'
     },
-    "size": {
-      "type": "array",
-      "items": {
-        "type": "number"
+    'size': {
+      'type': 'array',
+      'items': {
+        'type': 'number'
       }
     }
   },
-  "required": [
-    "selector",
-    "size"
+  'required': [
+    'selector',
+    'size'
   ],
-  "dependencies": {}
+  'dependencies': {}
 }

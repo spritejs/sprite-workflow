@@ -4,4 +4,4 @@ const _sprite = Symbol('sprite');
 const _workflow = Symbol('workflow');
 const _render = Symbol('render');
 
-export { _steps, _links, _sprite, _workflow }
+export { _steps, _links, _sprite, _workflow, _render }

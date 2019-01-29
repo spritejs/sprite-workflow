@@ -1,7 +1,7 @@
 /**
  * 获取类型
- * @param {any} 
- * @return {String} 
+ * @param {any}
+ * @return {String}
  */
 function getType(value) {
   const str = typeof value

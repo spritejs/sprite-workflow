@@ -1,9 +1,9 @@
 import { _links, _workflow, _steps } from './symbolNames'
 import { getType } from './utils'
-import { Circle } from 'spritejs';
+
 import { Step } from './step'
 import { Link } from './link'
-//import { start } from 'repl';
+
 
 /**
  * 根据传入的link找到相关的step
@@ -11,7 +11,7 @@ import { Link } from './link'
  * @param {*} type ['start','end'],link start部位的step与link end 部位的step
  */
 function getRelativeStep(link, type) {
-  if (!link instanceof Link) {
+  if (!(link instanceof Link)) {
     console.error('function getRelativeStep params error');
   }
   let res = [];
@@ -51,7 +51,7 @@ function refreshLink(params) { // [steps,links]根据step,link，更新link
   }
   function setLinkPoint(link, step) {
     const { startStepId, endStepId } = link.attr();
-    const stepId = step.attr("id");
+    const stepId = step.attr('id');
     const [ xMin, yMin, xMax, yMax ] = step.renderBox;
     const targetPoint = [ (xMin + xMax) / 2, (yMin + yMax) / 2 ];
     if (startStepId === stepId) {
@@ -67,21 +67,21 @@ function refreshLink(params) { // [steps,links]根据step,link，更新link
  * @param {*} point1 起始点
  * @param {*} points 终点
  */
-function getPointByXY(point1, point2, targetPoint) {
-  const [ x1, y1 ] = point1;
-  const [ x2, y2 ] = point2;
-  const [ x, y ] = targetPoint;
-  let res = [ x, y ];
-  if (x === undefined && y === undefined) {
-    return;
-  }
-  if (x === undefined) {
-    res[ 0 ] = (x2 - x1) / (y2 - y1) * (y - y1) + x1;
-  } else if (y === undefined) {
-    res[ 1 ] = (y2 - y1) / (x2 - x1) * (x - x1) + y1;
-  }
-  return res;
-}
+// function getPointByXY(point1, point2, targetPoint) {
+//   const [ x1, y1 ] = point1;
+//   const [ x2, y2 ] = point2;
+//   const [ x, y ] = targetPoint;
+//   let res = [ x, y ];
+//   if (x === undefined && y === undefined) {
+//     return;
+//   }
+//   if (x === undefined) {
+//     res[ 0 ] = (x2 - x1) / (y2 - y1) * (y - y1) + x1;
+//   } else if (y === undefined) {
+//     res[ 1 ] = (y2 - y1) / (x2 - x1) * (x - x1) + y1;
+//   }
+//   return res;
+// }
 
 /**
  * 获取直线上任一点的坐标，知道该点到一个端点的距离
@@ -103,11 +103,11 @@ function getPointByDistance(point1, point2, distance) {
  * @param {*} point1 起始点
  * @param {*} points 终点
  */
-function getDistanceByPoints(point1, point2) {
-  const [ x1, y1 ] = point1;
-  const [ x2, y2 ] = point2;
-  return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-}
+// function getDistanceByPoints(point1, point2) {
+//   const [ x1, y1 ] = point1;
+//   const [ x2, y2 ] = point2;
+//   return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+// }
 
 /**
  *判断线段ab与线段cd是否相交，如果相交，返回交点坐标
@@ -119,25 +119,26 @@ function getDistanceByPoints(point1, point2) {
 function segmentsIntersectionPoint(a, b, c, d) {
   // 判断每一条线段的两个端点是否都在另一条线段的两侧, 是则求出两条线段所在直线的交点, 否则不相交
   // 三角形abc 面积的2倍
-  var area_abc = (a[ 0 ] - c[ 0 ]) * (b[ 1 ] - c[ 1 ]) - (a[ 1 ] - c[ 1 ]) * (b[ 0 ] - c[ 0 ]);
+  var areaAbc = (a[ 0 ] - c[ 0 ]) * (b[ 1 ] - c[ 1 ]) - (a[ 1 ] - c[ 1 ]) * (b[ 0 ] - c[ 0 ]);
   // 三角形abd 面积的2倍
-  var area_abd = (a[ 0 ] - d[ 0 ]) * (b[ 1 ] - d[ 1 ]) - (a[ 1 ] - d[ 1 ]) * (b[ 0 ] - d[ 0 ]);
+  var areaAbd = (a[ 0 ] - d[ 0 ]) * (b[ 1 ] - d[ 1 ]) - (a[ 1 ] - d[ 1 ]) * (b[ 0 ] - d[ 0 ]);
   // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
-  if (area_abc * area_abd > 0) {
+  if (areaAbc * areaAbd > 0) {
     return false;
   }
   // 三角形cda 面积的2倍
-  var area_cda = (c[ 0 ] - a[ 0 ]) * (d[ 1 ] - a[ 1 ]) - (c[ 1 ] - a[ 1 ]) * (d[ 0 ] - a[ 0 ]);
+  var areaCda = (c[ 0 ] - a[ 0 ]) * (d[ 1 ] - a[ 1 ]) - (c[ 1 ] - a[ 1 ]) * (d[ 0 ] - a[ 0 ]);
   // 三角形cdb 面积的2倍
   // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
-  var area_cdb = area_cda + area_abc - area_abd;
-  if (area_cda * area_cdb > 0) {
+  var areaCdb = areaCda + areaAbc - areaAbd;
+  if (areaCda * areaCdb > 0) {
     return false;
   }
-  //计算交点坐标
-  var t = area_cda / (area_abd - area_abc);
-  var dx = t * (b[ 0 ] - a[ 0 ]),
-    dy = t * (b[ 1 ] - a[ 1 ]);
+  // 计算交点坐标
+  let t = areaCda / (areaAbd - areaAbc);
+  let dx = t * (b[ 0 ] - a[ 0 ]);
+
+  let dy = t * (b[ 1 ] - a[ 1 ]);
   return [ a[ 0 ] + dx, a[ 1 ] + dy ];
 }
 /**
@@ -171,8 +172,8 @@ function getPolygonIntersectionPoint(points, startPoint, endPoint, multi = false
 }
 
 function getAngleByPoints(point1, point2) {
-  let angle = Math.atan2((point2[ 1 ] - point1[ 1 ]), (point2[ 0 ] - point1[ 0 ])) //弧度
-  let theta = angle * (180 / Math.PI); //角度
+  let angle = Math.atan2((point2[ 1 ] - point1[ 1 ]), (point2[ 0 ] - point1[ 0 ])) // 弧度
+  let theta = angle * (180 / Math.PI); // 角度
   return { angle, theta }
 }
 

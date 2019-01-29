@@ -1,8 +1,8 @@
-import { Polyline, Triangle, Circle } from 'spritejs'
-import { getIntersectionPoint, getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints } from './functions'
+import { Polyline, Triangle } from 'spritejs'
+import { getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints } from './functions'
 const linkExtendtion = {
   'draw': {
-    line: function () {//直线直接连接
+    line: function () { // 直线直接连接
       this.$link = new Polyline();
       this.$arrow = new Triangle();
       const { startPoint, endPoint } = this.attr();
@@ -11,7 +11,7 @@ const linkExtendtion = {
       this.append(this.$link);
       this.append(this.$arrow);
     },
-    polyline: function () { //折线连接
+    polyline: function () { // 折线连接
       this.$link = new Polyline();
       this.$arrow = new Triangle();
       const { startPoint, endPoint } = this.attr();
@@ -32,15 +32,14 @@ const linkExtendtion = {
       }
       if (this.$arrow) {
         let endPoint = points[ points.length - 1 ];
-        let [ x, y ] = endPoint;
-        this.$arrow.attr({ pos: [ endPoint[ 0 ], endPoint[ 1 ] ], rotate: theta + (180 - 22.5) })
+        this.$arrow.attr({ pos: endPoint, rotate: theta + (180 - 22.5) })
       }
     }
   },
   'update': {
-    rect: function (newAttrs, oldAttrs) { //矩形框处理剪头指向位置处理
+    rect: function (newAttrs, oldAttrs) { // 矩形框处理剪头指向位置处理
       const endStep = this.getLinkedSteps('end')[ 0 ];
-      const { startPoint, endPoint, angle, theta } = newAttrs;
+      const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
       const points = [ [ xMin, yMin ], [ xMax, yMin ], [ xMax, yMax ], [ xMin, yMax ] ];
       if (this.drawType === 'line') {
@@ -49,13 +48,13 @@ const linkExtendtion = {
         updatePolygonByPolyline.call(this, points, startPoint, endPoint)
       }
     },
-    circle: function (newAttrs, oldAttrs) { //圆形框处理剪头指向位置处理
+    circle: function (newAttrs, oldAttrs) { // 圆形框处理剪头指向位置处理
       const endStep = this.getLinkedSteps('end')[ 0 ];
-      const { startPoint, endPoint, angle, theta } = newAttrs;
+      const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
       const r = Math.max(xMax - xMin, yMin - yMax) / 2;
       if (this.drawType === 'line') {
-        let linkEndPoint = getPointByDistance(endPoint, startPoint, r) //4为保护距离到实际点的空隙
+        let linkEndPoint = getPointByDistance(endPoint, startPoint, r) // 4为保护距离到实际点的空隙
         if (linkEndPoint) {
           linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
           linkExtendtion.attrUpdate.call(this, [ startPoint, linkEndPoint ], theta);
@@ -65,15 +64,15 @@ const linkExtendtion = {
         if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
           insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
         }
-        let linkEndPoint = getPointByDistance(endPoint, insertPoint, r + 4) //4为保护距离到实际点的空隙
+        let linkEndPoint = getPointByDistance(endPoint, insertPoint, r + 4) // 4为保护距离到实际点的空隙
         const { theta } = getAngleByPoints(insertPoint, linkEndPoint);
         linkExtendtion.attrUpdate.call(this, [ startPoint, insertPoint, linkEndPoint ], theta);
       }
     },
     star: function (newAttrs, oldAttrs) {
       const endStep = this.getLinkedSteps('end')[ 0 ];
-      let { startPoint, endPoint, angle, theta } = newAttrs;
-      const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
+      let { startPoint, endPoint, theta } = newAttrs;
+      const [ xMin, yMin ] = endStep.renderBox;
       const points = endStep.points;
       const realPoints = points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
       if (this.drawType === 'line') {
@@ -82,7 +81,7 @@ const linkExtendtion = {
         updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
       }
     },
-    triangle: function (newAttrs, oldAttrs) { //圆形框处理剪头指向位置处理
+    triangle: function (newAttrs, oldAttrs) { // 圆形框处理剪头指向位置处理
       const endStep = this.getLinkedSteps('end')[ 0 ];
       const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.renderBox;

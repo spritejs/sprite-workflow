@@ -1,8 +1,7 @@
 import { Base } from './base'
-import { Sprite, Polyline, Rect, Label, Triangle } from 'spritejs';
 import { draggable } from 'sprite-draggable'
 import { refreshLink } from './functions'
-import { newObj, getType, getLinePoint, getPointsDistance } from './utils'
+import { newObj, getType } from './utils'
 import { _render } from './symbolNames';
 import { linkExtendtion } from './stepExtendtion'
 class Step extends Base {
@@ -12,7 +11,7 @@ class Step extends Base {
     const { pos } = attrs;
     this.container.attr({ pos, zIndex: 100 });
     this.draggable();
-    /*内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
+    /* 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
     this.drawType = attrs.drawType || 'rect';
     this.draw = linkExtendtion[ this.drawType ].draw;
     this.on('dragstart', (e) => {
@@ -43,7 +42,7 @@ class Step extends Base {
     return this.container
   }
   draw() {
-    console.error("you must overwrite this function step.draw()")
+    console.error('you must overwrite this function step.draw()')
   }
 }
 export { Step }

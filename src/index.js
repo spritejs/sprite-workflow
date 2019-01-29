@@ -1,4 +1,3 @@
-import { getType, guid } from './utils'
 import { install } from 'sprite-extend-shapes'
 import { Base } from './base'
 import { Step } from './step'
@@ -6,7 +5,7 @@ import { Link } from './link'
 import * as spritejs from 'spritejs'
 import { _steps, _links, _workflow, _render } from './symbolNames'
 import * as functions from './functions'
-const { Scene, Layer, Group } = spritejs;
+const { Scene } = spritejs;
 
 spritejs.use(install);
 class Workflow extends Base {
@@ -32,7 +31,7 @@ class Workflow extends Base {
     this[ _steps ] = [];
     this[ _links ] = [];
     let layer = scene.layer();
-    scene.delegateEvent('mousewheel', document); //sprite 元素侦听mousewheel事件
+    scene.delegateEvent('mousewheel', document); // sprite 元素侦听mousewheel事件
     layer.append(this.container);
     if (this.attr('zoom') !== false) {
       zoom.call(this, layer, this.container);
@@ -92,18 +91,18 @@ function zoom(layer, group) {
   });
   layer.on('mousewheel', (e) => {
     e.preventDefault();
-    const [ scaleX, scaleY ] = group.attr('scale');
-    let [ w, h ] = group.attr("size");
+    const [ scaleX ] = group.attr('scale');
+    let [ w, h ] = group.attr('size');
     let direction = 1;
-    if (e.originalEvent.wheelDelta < 0) {//向下滚动
+    if (e.originalEvent.wheelDelta < 0) { // 向下滚动
       direction = -1;
     }
     const dscale = 0.5 * direction;
     /** 计算以鼠标点为中心缩放 **/
     const [ oAnchorX, oAnchorY ] = group.attr('anchor');
-    let pX = (oAnchorX * w + e.offsetX) / w; //鼠标点相对占比
+    let pX = (oAnchorX * w + e.offsetX) / w; // 鼠标点相对占比
     let pY = (oAnchorY * h + e.offsetY) / h;
-    const [ oX, oY ] = group.attr("pos");
+    const [ oX, oY ] = group.attr('pos');
     let dx = w * dscale * pX;
     let dy = h * dscale * pY;
     const zoom = this.attr('zoom');
@@ -112,4 +111,5 @@ function zoom(layer, group) {
     }
   });
 }
+
 export { Workflow, Link, Step, functions }
