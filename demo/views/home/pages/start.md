@@ -31,14 +31,7 @@ const { Workflow, Link, Step } = window.spriteWorkflow;
 
     let workflow = new Workflow({ selector: '.block-demo .demo', size: [ width, height ], zoom: [ 0.5, 2 ] });
     steps.forEach(object => {
-      let step = new Step(object, {
-        // draw: function () {
-        // const { draw, text } = this.attr();
-        // let $rect = new Label(text);
-        // $rect.attr({ bgcolor: 'rgba(0,255,0,0.8)', padding: [ 6, 10 ], borderRadius: [ 5, 5 ] });
-        // this.append($rect);
-        // }
-      });
+      let step = new Step(object);
       workflow.append(step);
     })
     links.forEach(object => {

@@ -25,7 +25,7 @@ class Step extends Base {
       this.container.attr({ zIndex: 100 });
     });
     // 如果外部重写draw方法，用外部方法覆盖,并将step的类型设置成custom
-    if (getType(option.draw) === 'function') {
+    if (option && getType(option.draw) === 'function') {
       this.draw = option.draw;
       this.drawType = 'custom';
     }
