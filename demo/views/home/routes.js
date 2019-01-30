@@ -11,7 +11,7 @@ export default [
   },
   {
     title: '开始',
-    path: 'pie',
+    path: 'start',
     component: () => import('./pages/start.md')
   },
   {
