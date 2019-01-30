@@ -18,5 +18,20 @@ export default [
     title: '自定义Step',
     path: 'step',
     component: () => import('./pages/step.md')
+  },
+  {
+    title: '自定义Link',
+    path: 'link',
+    component: () => import('./pages/link.md')
+  },
+  {
+    title: 'step与link联动',
+    path: 'step_link',
+    component: () => import('./pages/step_link.md')
+  },
+  {
+    title: 'Step与Link事件',
+    path: 'event',
+    component: () => import('./pages/event.md')
   }
 ]

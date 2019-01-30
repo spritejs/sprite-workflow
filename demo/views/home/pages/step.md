@@ -13,7 +13,7 @@
 
 ```javascript
 const { Workflow, Link, Step } = window.spriteWorkflow;
-const {Polygon,Label} = window.spritejs;
+const {Polygon,Label,Sprite} = window.spritejs;
 let stepObject = {id: 'abc-123',drawType:'polygon-my',pos:[ 100, 20 ],text: '我是矩形3'};
 let workflow = new Workflow({
   selector:'.block-demo .demo',size:[ 400, 300 ],
@@ -23,10 +23,15 @@ let step = new Step(stepObject,{
   draw:function(){
     this.points = [[0,0],[100,0],[100,40],[0,40]]; // 四个点组成矩形
     let $polygon = new Polygon(); // 创建一个多边形
-    $polygon.attr({points:this.points,fillColor:'#f00'});
+    $polygon.attr({points:this.points,fillColor:'#0ff'});
     let $label = new Label(this.attr('text')); // 为stepObject中的text
+    $label.attr({pos:[10,25]});
+    //加入一张图片
+    const $sprite = new Sprite('https://p5.ssl.qhimg.com/t01a2bd87890397464a.png');
+    $sprite.attr({size:[50,50],pos:[20,-20]})
     this.append($polygon);
     this.append($label);
+    this.append($sprite);
   }
 }); // 创建step
 step.on('drag',function(e){ //drag事件，同样可以支持，click等等鼠标事件

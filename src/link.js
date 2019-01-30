@@ -12,7 +12,6 @@ class Link extends Base {
       endPoint: [ 0, 0 ]
     })
     this.attr(newObj(attrs));
-    this.on('update', this.update);
     // 内置的Step 类型，有 ['line','polyline']
     if (option && option.draw) {
       this.draw = option.draw;
@@ -24,6 +23,7 @@ class Link extends Base {
     if (option && option.update) {
       this.update = option.update;
     }
+    this.on('update', this.update);
   }
   attrUpdate(newAttrs, oldAttrs) {
     let keys = Object.keys(newAttrs);
@@ -42,9 +42,7 @@ class Link extends Base {
       this.dispatchEvent('update', { newAttrs: mergeAttrs, oldAttrs });
     }
   }
-  update(event) {
-
-  }
+  update(event) { }
   /**
    * 获取link相关步骤
    * @param {*} type ['start','end']
@@ -54,8 +52,11 @@ class Link extends Base {
   }
   [ _render ]() {
     this.draw();
-    refreshLink(this);
     return this.container;
+  }
+  mounted() {
+    super.mounted()
+    refreshLink(this)
   }
   draw() { }
 }

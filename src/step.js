@@ -39,8 +39,11 @@ class Step extends Base {
    */
   [ _render ]() {
     this.draw();
-    refreshLink(this);
     return this.container
+  }
+  mounted() {
+    super.mounted()
+    refreshLink(this);
   }
   draw() {
     console.error('you must overwrite this function step.draw()')

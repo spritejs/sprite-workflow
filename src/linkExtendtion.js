@@ -78,10 +78,10 @@ const linkExtendtion = {
       const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.renderBox;
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      if (this.drawType === 'line') {
-        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
-      } else {
+      if (this.drawType.indexOf('polyline') === 0) {
         updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
+      } else {
+        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
       }
     }
   }
