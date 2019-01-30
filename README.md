@@ -4,7 +4,7 @@ Draws workflow chart diagrams with spritejs
 
 详细文档 <a target="_blank" style="font-weight:bold" href='https://www.spritejs.com/workflow'>  → spritejs-workflow </a>
 
-如果你想用js做一些workflow <small>(工作流)</small> 相关的东西，然后恰巧你也了解过 <a target="_blank" style="font-weight:bold" href='https://www.spritejs.com'>  spritejs </a>，那么，```sprite-workflow``` 用来构建流程可视化相关功能将会非常方便。
+如果你想用js做一些workflow可视化 <small>(工作流)</small> 相关的东西，然后恰巧你也了解过 <a target="_blank" style="font-weight:bold" href='https://www.spritejs.com'>  spritejs </a>，那么，```sprite-workflow``` 用来构建流程可视化相关功能将会非常方便。
 
 当然，就算你不是很了解```spritejs```，也没有很大的问题，```spritejs```上手可是非常快的，它能像操作DOM对象一样操作画布上的图形元素。具体可以查看 <a target="_blank" style="font-weight:bold" href='https://www.spritejs.com'> spritejs api </a>
 
