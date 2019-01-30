@@ -25,7 +25,7 @@ export default [
     component: () => import('./pages/link.md')
   },
   {
-    title: 'step与link联动',
+    title: 'Step与Link联动',
     path: 'step_link',
     component: () => import('./pages/step_link.md')
   },
@@ -33,5 +33,10 @@ export default [
     title: 'Step与Link事件',
     path: 'event',
     component: () => import('./pages/event.md')
+  },
+  {
+    title: '相关接口',
+    path: 'props',
+    component: () => import('./pages/props.md')
   }
 ]

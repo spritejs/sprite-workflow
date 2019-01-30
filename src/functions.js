@@ -86,10 +86,10 @@ function refreshLink(params) { // [steps,links]根据step,link，更新link
 // }
 
 /**
- * 获取直线上任一点的坐标，知道该点到一个端点的距离
+ * 获取直线上到point1距离为d的点坐标
  * @param {*} point1 直线开始坐标
  * @param {*} point2 直线结束坐标
- * @param {*} d 直线上一点到point1点的距离
+ * @param {*} distance 直线上一点到point1点的距离
  */
 function getPointByDistance(point1, point2, distance) {
   const [ x1, y1 ] = point1;
@@ -99,17 +99,6 @@ function getPointByDistance(point1, point2, distance) {
   const y = (distance * (y2 - y1)) / r + y1;
   return [ x, y ];
 }
-
-/**
- * 求两个坐标点的距离
- * @param {*} point1 起始点
- * @param {*} points 终点
- */
-// function getDistanceByPoints(point1, point2) {
-//   const [ x1, y1 ] = point1;
-//   const [ x2, y2 ] = point2;
-//   return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-// }
 
 /**
  *判断线段ab与线段cd是否相交，如果相交，返回交点坐标

@@ -14,9 +14,7 @@ class Workflow extends Base {
     /*****
   * selector:css选择器
   * size:canvas大小
-  * zoom:是否搜房
-  * zoomMax:最大缩放
-  * zoomMin:最小缩放
+  * zoom:是缩放
   * **/
     this.attr(Object.assign({
       'selector': '',
