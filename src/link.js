@@ -4,7 +4,7 @@ import { refreshLink, getRelativeStep, getAngleByPoints } from './functions'
 import { _render } from './symbolNames'
 import { linkExtendtion } from './linkExtendtion'
 class Link extends Base {
-  constructor(attrs) {
+  constructor(attrs, option) {
     super(attrs);
     /* 属性，相关绘制属性等 */
     this.attr({
@@ -13,26 +13,37 @@ class Link extends Base {
     })
     this.attr(newObj(attrs));
     this.on('update', this.update);
-    // 读取默认link绘制方
-    this.drawType = attrs.drawType || 'line';
-    this.draw = linkExtendtion.draw[ this.drawType ];
+    // 内置的Step 类型，有 ['line','polyline']
+    if (option && option.draw) {
+      this.draw = option.draw;
+      this.drawType = attrs.drawType || 'custom';
+    } else {
+      this.drawType = attrs.drawType || 'line';
+      this.draw = linkExtendtion.draw[ this.drawType ];
+    }
+    if (option && option.update) {
+      this.update = option.update;
+    }
   }
   attrUpdate(newAttrs, oldAttrs) {
     let keys = Object.keys(newAttrs);
     if (keys.indexOf('startPoint') !== -1 || keys.indexOf('endPoint') !== -1) {
       const { startPoint, endPoint } = this.attr();
       const { angle, theta } = getAngleByPoints(startPoint, endPoint);
-      this.dispatchEvent('update', { newAttrs: newObj({ startPoint, endPoint, angle, theta }, newAttrs), oldAttrs });
+      let mergeAttrs = newObj({ startPoint, endPoint, angle, theta }, newAttrs);
+      const endStep = this.getLinkedSteps('end')[ 0 ];
+      if (endStep) {
+        [ 'rect', 'circle', 'triangle', 'star', 'diamond', 'polygon' ].forEach(type => {
+          if (endStep.drawType.indexOf(type) === 0) {
+            linkExtendtion.update[ type ].call(this, mergeAttrs, oldAttrs)
+          }
+        })
+      }
+      this.dispatchEvent('update', { newAttrs: mergeAttrs, oldAttrs });
     }
   }
   update(event) {
-    const { newAttrs, oldAttrs } = event;
-    const endStep = this.getLinkedSteps('end')[ 0 ];
-    [ 'rect', 'circle', 'triangle', 'star', 'diamond' ].forEach(type => {
-      if (endStep.drawType.indexOf(type) === 0) {
-        linkExtendtion.update[ type ].call(this, newAttrs, oldAttrs)
-      }
-    })
+
   }
   /**
    * 获取link相关步骤

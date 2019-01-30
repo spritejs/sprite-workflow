@@ -16,13 +16,15 @@ function getRelativeStep(link, type) {
   }
   let res = [];
   const { startStepId, endStepId } = link.attr();
-  let steps = link[ _workflow ][ _steps ];
-  if (type === undefined) {
-    res = steps.filter(step => step.id === startStepId || step.id === endStepId)
-  } else if (type === 'start') {
-    res = steps.filter(step => step.id === startStepId)
-  } else if (type === 'end') {
-    res = steps.filter(step => step.id === endStepId)
+  if (link[ _workflow ]) {
+    let steps = link[ _workflow ][ _steps ];
+    if (type === undefined) {
+      res = steps.filter(step => step.id === startStepId || step.id === endStepId)
+    } else if (type === 'start') {
+      res = steps.filter(step => step.id === startStepId)
+    } else if (type === 'end') {
+      res = steps.filter(step => step.id === endStepId)
+    }
   }
   return res;
 }

@@ -1,7 +1,7 @@
 import { Base } from './base'
 import { draggable } from 'sprite-draggable'
 import { refreshLink } from './functions'
-import { newObj, getType } from './utils'
+import { newObj } from './utils'
 import { _render } from './symbolNames';
 import { linkExtendtion } from './stepExtendtion'
 class Step extends Base {
@@ -12,8 +12,6 @@ class Step extends Base {
     this.container.attr({ pos, zIndex: 100 });
     this.draggable();
     /* 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
-    this.drawType = attrs.drawType || 'rect';
-    this.draw = linkExtendtion[ this.drawType ].draw;
     this.on('dragstart', (e) => {
       this.container.attr({ zIndex: 101 });
     });
@@ -25,9 +23,12 @@ class Step extends Base {
       this.container.attr({ zIndex: 100 });
     });
     // 如果外部重写draw方法，用外部方法覆盖,并将step的类型设置成custom
-    if (option && getType(option.draw) === 'function') {
+    if (option && option.draw) {
+      this.drawType = attrs.drawType || 'custom';
       this.draw = option.draw;
-      this.drawType = 'custom';
+    } else {
+      this.drawType = attrs.drawType || 'rect';
+      this.draw = linkExtendtion[ this.drawType ].draw;
     }
   }
   draggable(option) {

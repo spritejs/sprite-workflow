@@ -39,14 +39,9 @@ const linkExtendtion = {
   'update': {
     rect: function (newAttrs, oldAttrs) { // 矩形框处理剪头指向位置处理
       const endStep = this.getLinkedSteps('end')[ 0 ];
-      const { startPoint, endPoint, theta } = newAttrs;
-      const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
-      const points = [ [ xMin, yMin ], [ xMax, yMin ], [ xMax, yMax ], [ xMin, yMax ] ];
-      if (this.drawType === 'line') {
-        updatePolygonByline.call(this, points, startPoint, endPoint, theta);
-      } else {
-        updatePolygonByPolyline.call(this, points, startPoint, endPoint)
-      }
+      const [ xMin, yMin, xMax, yMax ] = endStep.sizeBox;
+      endStep.points = [ [ xMin, yMin ], [ xMax, yMin ], [ xMax, yMax ], [ xMin, yMax ] ]; // 构造多边形的顶点
+      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs); // 用通用多边形逻辑来处理
     },
     circle: function (newAttrs, oldAttrs) { // 圆形框处理剪头指向位置处理
       const endStep = this.getLinkedSteps('end')[ 0 ];
@@ -70,29 +65,15 @@ const linkExtendtion = {
       }
     },
     star: function (newAttrs, oldAttrs) {
-      const endStep = this.getLinkedSteps('end')[ 0 ];
-      let { startPoint, endPoint, theta } = newAttrs;
-      const [ xMin, yMin ] = endStep.renderBox;
-      const points = endStep.points;
-      const realPoints = points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      if (this.drawType === 'line') {
-        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
-      } else {
-        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
-      }
+      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs);
     },
     triangle: function (newAttrs, oldAttrs) { // 圆形框处理剪头指向位置处理
-      const endStep = this.getLinkedSteps('end')[ 0 ];
-      const { startPoint, endPoint, theta } = newAttrs;
-      const [ xMin, yMin ] = endStep.renderBox;
-      const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      if (this.drawType === 'line') {
-        updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta);
-      } else {
-        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
-      }
+      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs);
     },
     diamond: function (newAttrs, oldAttrs) {
+      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs);
+    },
+    polygon: function (newAttrs, oldAttrs) {
       const endStep = this.getLinkedSteps('end')[ 0 ];
       const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.renderBox;

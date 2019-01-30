@@ -13,5 +13,10 @@ export default [
     title: '开始',
     path: 'pie',
     component: () => import('./pages/start.md')
+  },
+  {
+    title: '自定义Step',
+    path: 'step',
+    component: () => import('./pages/step.md')
   }
 ]

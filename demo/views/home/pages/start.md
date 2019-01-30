@@ -1,5 +1,9 @@
 ## 开始
-
+如下：在页面中引入spritejs与sprite-workflow后，你可以非常简单得开始使用sprite-workflow
+``` html
+  <script src="https://unpkg.com/spritejs/dist/spritejs.min.js"></script>
+  <script src="https://unpkg.com/sprite-workflow/lib/index.js"></script>
+  ```
 :::demo
 
 ```javascript
@@ -9,11 +13,11 @@ const height = 460;
 const getGuid = () => Math.random().toString(36).slice(2);
 // 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
 let steps = [
-  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 450, 110 ], text: '我是矩形' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 340, 240 ], text: '五角' },
-  { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 340, 400 ], text: '菱形' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 450, 20 ], text: '我是矩形' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 10 ], text: '圆' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 100, 200 ], text: '三角' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 240, 240 ], text: '五角' },
+  { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 340, 300 ], text: '菱形' },
 ];
 // 内置的link 类型，有 ['line','polyline'],line 直线 polyline 折线默认line */
 let links = [
