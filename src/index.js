@@ -52,6 +52,7 @@ class Workflow extends Base {
   append(sprite) {
     if (sprite === undefined) return;
     sprite[ _workflow ] = this;
+    sprite[ '$parent' ] = this.container;
     if (sprite instanceof Step) {
       this[ _steps ].push(sprite);
     } else if (sprite instanceof Link) {
@@ -81,7 +82,7 @@ function zoom(layer, group) {
     if (draged) {
       let dx = e.offsetX - oX;
       let dy = e.offsetY - oY;
-      group.transition(0.01).attr({ pos: [ startX + dx, startY + dy ] });
+      group.transition(0).attr({ pos: [ startX + dx, startY + dy ] });
     }
   })
   layer.on('mouseup', (e) => {
@@ -95,7 +96,7 @@ function zoom(layer, group) {
     if (e.originalEvent.wheelDelta < 0) { // 向下滚动
       direction = -1;
     }
-    const dscale = 0.5 * direction;
+    const dscale = 0.3 * direction;
     /** 计算以鼠标点为中心缩放 **/
     const [ oAnchorX, oAnchorY ] = group.attr('anchor');
     let pX = (oAnchorX * w + e.offsetX) / w; // 鼠标点相对占比
@@ -105,7 +106,7 @@ function zoom(layer, group) {
     let dy = h * dscale * pY;
     const zoom = this.attr('zoom');
     if (scaleX + dscale > zoom[ 0 ] && scaleX + dscale < zoom[ 1 ]) {
-      group.transition(0.1).attr({ scale: [ scaleX + dscale, scaleX + dscale ], pos: [ oX - dx, oY - dy ] });
+      group.transition(0).attr({ scale: [ scaleX + dscale, scaleX + dscale ], pos: [ oX - dx, oY - dy ] });
     }
   });
 }

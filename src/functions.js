@@ -54,8 +54,8 @@ function refreshLink(params) { // [steps,links]根据step,link，更新link
   function setLinkPoint(link, step) {
     const { startStepId, endStepId } = link.attr();
     const stepId = step.attr('id');
-    const [ xMin, yMin, xMax, yMax ] = step.renderBox;
-    const targetPoint = [ (xMin + xMax) / 2, (yMin + yMax) / 2 ];
+    const [ xMin, yMin ] = step.container.attr('pos');
+    const targetPoint = [ xMin, yMin ];
     if (startStepId === stepId) {
       link.attr({ startPoint: targetPoint });
     } else if (endStepId === stepId) {

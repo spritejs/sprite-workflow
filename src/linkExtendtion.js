@@ -76,7 +76,7 @@ const linkExtendtion = {
     polygon: function (newAttrs, oldAttrs) {
       const endStep = this.getLinkedSteps('end')[ 0 ];
       const { startPoint, endPoint, theta } = newAttrs;
-      const [ xMin, yMin ] = endStep.renderBox;
+      const [ xMin, yMin ] = endStep.container.attr('pos');
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
       if (this.drawType.indexOf('polyline') === 0) {
         updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint)
@@ -88,6 +88,7 @@ const linkExtendtion = {
 }
 function updatePolygonByline(points, startPoint, endPoint, theta) {
   let linkEndPoint = getPolygonIntersectionPoint(points, startPoint, endPoint);
+  // console.log('aaa', linkEndPoint)
   if (linkEndPoint) {
     linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
     linkExtendtion.attrUpdate.call(this, [ startPoint, linkEndPoint ], theta);

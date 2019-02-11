@@ -10,7 +10,7 @@ class Base extends BaseNode {
     this.sizeBox = [ 0, 0, 0, 0 ]; // group内部大小
     this.renderBox = [ 0, 0, 0, 0 ] // 对于外接容器大小
     this.container = new Group();
-    this.container.attr({ bgcolor: 'rgba(255,255,255,0.01)', size: [ 0.01, 0.01 ], clipOverflow: false });// 将group设置成非常小，不影响其他dom，并且不clip内部元素
+    this.container.attr({ bgcolor: 'rgba(255,255,255,0.1)', size: [ 0.1, 0.1 ], clipOverflow: false });// 将group设置成非常小，不影响其他dom，并且不clip内部元素
     this.validatorSchema(attrs);
     [ 'dragstart', 'drag', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop', 'click', 'dblclick', 'mouseenter', 'mouseleave', 'mousemove', 'mousedown' ].forEach(evt => { // 透传container上的事件
       this.container.on(evt, (e) => {
@@ -89,11 +89,12 @@ class Base extends BaseNode {
     }
   }
   mounted() { // 渲染后，重新计算renderBox
+    let container = this.container;
     let [ xMin, yMin, xMax, yMax ] = this.sizeBox;
-    this.renderBox = this.container.renderBox;
-    const [ oX, oY ] = this.renderBox;
-    if (this.container.children.length > 0) {
-      this.container.children.forEach(sprite => {
+    this.renderBox = container.renderBox;
+    let [ oX, oY ] = this.renderBox;
+    if (container.children.length > 0) {
+      container.children.forEach(sprite => {
         const renderBox = sprite.renderBox;
         xMin = Math.min(xMin, renderBox[ 0 ]);
         yMin = Math.min(yMin, renderBox[ 1 ]);

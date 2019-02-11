@@ -3,20 +3,31 @@ import { draggable } from 'sprite-draggable'
 import { refreshLink } from './functions'
 import { newObj } from './utils'
 import { _render } from './symbolNames';
-import { linkExtendtion } from './stepExtendtion'
+import { stepExtendtion } from './stepExtendtion'
 class Step extends Base {
   constructor(attrs, option) {
     super(attrs);
-    this.attr(newObj(attrs));
-    const { pos } = attrs;
+    let mergeAttrs = newObj({
+      padding: [ 6, 10 ],
+      bgcolor: 'rgba(0,255,0,1)',
+      pos: [ 0, 0 ],
+      borderRadius: [ 5, 5 ],
+      color: '#000000',
+      font: '14px "宋体"',
+      text: '步骤'
+    }, attrs);
+    if (attrs.fontSize && !attrs.font) { // 如果有fontSize，没有font，label不支持fontSize属性
+      mergeAttrs.font = `${attrs.fontSize}px "宋体"`
+    }
+    this.attr(mergeAttrs);
+    const { pos } = mergeAttrs;
     this.container.attr({ pos, zIndex: 100 });
     this.draggable();
     /* 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
     this.on('dragstart', (e) => {
-      this.container.attr({ zIndex: 101 });
+      this.container.attr({ zIndex: 110 });
     });
     this.on('drag', (e) => {
-      this.container.attr({ zIndex: 101 });
       refreshLink(this);
     });
     this.on('dragend', (e) => {
@@ -28,8 +39,12 @@ class Step extends Base {
       this.draw = option.draw;
     } else {
       this.drawType = attrs.drawType || 'rect';
-      this.draw = linkExtendtion[ this.drawType ].draw;
+      this.draw = stepExtendtion[ this.drawType ].draw;
     }
+  }
+
+  append(sprite) {
+    this.container.append(sprite);
   }
   draggable(option) {
     draggable(this.container, option);

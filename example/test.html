@@ -29,11 +29,11 @@
 
     // 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
     let steps = [
-      { id: getGuid(), data: { a: 1 }, drawType: 'rect', pos: [ 450, 110 ], text: '我是矩形' },
-      { id: getGuid(), data: { a: 1 }, drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
+      { id: getGuid(), data: { a: 1 }, bgcolor: '#f00', borderRadius: 8, drawType: 'rect', fontSize: 12, pos: [ 100, 400 ], text: '我是矩形' },
+      { id: getGuid(), data: { a: 1 }, bgcolor: '#f00', drawType: 'circle', pos: [ 100, 100 ], text: '圆' },
       { id: getGuid(), data: { a: 1 }, drawType: 'triangle', pos: [ 200, 200 ], text: '三角' },
       { id: getGuid(), data: { a: 1 }, drawType: 'star', pos: [ 340, 240 ], text: '五角' },
-      { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 340, 400 ], text: '菱形' },
+      { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 340, 400 ], text: '菱形菱形菱形菱形菱形菱形' },
     ];
     // 内置的link 类型，有 ['line','polyline'],line 直线 polyline 折线默认line */
     let links = [
