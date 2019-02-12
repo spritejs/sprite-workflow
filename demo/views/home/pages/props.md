@@ -17,11 +17,16 @@
 ## Step
 
 #### 参数属性：
-| 参数        | 说明     | 类型     | 可选值                                        | 默认值 |
-| ----------- | -------- | -------- | --------------------------------------------- | ------ |
-| id*         | 步骤id   |          | 必填                                          |        |
-| drawType    | 绘制类型 | String   | ['rect','circle','triangle','star','diamond'] | rect   |
-| option.draw | 绘制方法 | Function |                                               |        |
+| 参数        | 说明                                                          | 类型     | 可选值                                                         | 默认值 |
+| ----------- | ------------------------------------------------------------- | -------- | -------------------------------------------------------------- | ------ |
+| id*         | 步骤id                                                        |          | 必填                                                           |        |
+| fillColor   | 图形填充颜色                                                  |          |                                                                |        |
+| pos         | 图形的位置                                                    |          |                                                                |        |
+| text        | 步骤显示文本                                                  |          |                                                                |        |
+| textAttrs   | 步骤显示文本样式                                              |          | { padding: [ 0, 0, 20 ], color: '#f00' }                       |        |
+| shapeAttrs  | 步骤图形样式属性(不同类型，设置值不同，参考extend-shapes属性) |          | { radiusX: 60, radiusY: 30 } drawType为ellipse时，设置椭圆大小 |        |
+| drawType    | 绘制类型                                                      | String   | ['rect','circle','triangle','star','diamond']                  | rect   |
+| option.draw | 绘制方法                                                      | Function |                                                                |        |
 
 
 #### 方法：
@@ -34,13 +39,16 @@
 ## Link
 
 #### 参数属性：
-| 参数          | 说明       | 类型                        | 可选值                         | 默认值 |
-| ------------- | ---------- | --------------------------- | ------------------------------ | ------ |
-| startStepId * | 开始步骤id |                             | 必填                           |        |
-| endStepId *   | 结束步骤id |                             | 必填                           |        |
-| drawType      | 绘制类型   | String                      | ['line','polyline'] 直线，折线 | 'line' |
-| option.draw   | 绘制方法   | Function                    |                                |        |
-| option.update | 更新方法   | Function(newAttrs,oldAttrs) |                                |        |
+| 参数          | 说明                   | 类型                        | 可选值                                                       | 默认值                               |
+| ------------- | ---------------------- | --------------------------- | ------------------------------------------------------------ | ------------------------------------ |
+| startStepId * | 开始步骤id             |                             | 必填                                                         |                                      |
+| endStepId *   | 结束步骤id             |                             | 必填                                                         |                                      |
+| text          | link显示文本           |                             |                                                              |                                      |
+| textAttrs     | link显示文本样式       |                             | { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' } | `autoRotate`表示是否跟随link角度旋转 |
+| lineAttrs     | link显示连接线line样式 |                             | { color: '#f0f', lineDash: [ 6, 6 ]}                         |                                      |
+| drawType      | 绘制类型               | String                      | ['line','polyline'] 直线，折线                               | 'line'                               |
+| option.draw   | 绘制方法               | Function                    |                                                              |                                      |
+| option.update | 更新方法               | Function(newAttrs,oldAttrs) |                                                              |                                      |
 
 
 

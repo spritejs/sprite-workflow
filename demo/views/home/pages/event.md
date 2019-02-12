@@ -15,12 +15,12 @@ let workflow = new Workflow({
 let step = new Step(stepObject,{
   draw:function(){
     const $sprite = new Sprite('https://p5.ssl.qhimg.com/t01c33383c0e168c3c4.png');
-    $sprite.attr({size:[100,130]})
+    $sprite.attr({size:[100,130],pos:[-50,-65]})
     this.append($sprite);
   }
 }); // 创建step
 let step1 = new Step(stepObject1);
-let link = new Link({startStepId:'abc-123',drawType:'polyline',endStepId:'abc-234'})
+let link = new Link({startStepId:'abc-123',drawType:'polyline',endStepId:'abc-234',lineAttrs:{color:'#f00',lineDash:[6,6]}})
 step.on('drag',function(e){ //drag事件，同样可以支持，click等等鼠标事件
   console.log(e);
 });

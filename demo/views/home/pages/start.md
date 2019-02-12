@@ -23,7 +23,7 @@ let steps = [
 let links = [
   { startStepId: steps[ 0 ].id, drawType: 'line', endStepId: steps[ 1 ].id, text: '连接线', textAttrs: { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' }, lineAttrs: { lineDash: [ 6, 6 ], lineDashOffset: 6, lineWidth: 1, color: '#0ff' } },
   { startStepId: steps[ 1 ].id, drawType: 'line', endStepId: steps[ 2 ].id, text: '连接０', textAttrs: { color: '#0f0' }, lineAttrs: { lineDash: [ 6, 6 ], lineDashOffset: 6, lineWidth: 1, color: '#f00' } },
-  { startStepId: steps[ 2 ].id, drawType: 'line', endStepId: steps[ 3 ].id, text: '连接1', textAttrs: { padding: [ 0, 0, 20 ], color: '#f00' }, lineAttrs: { lineWidth: 1, color: '#f0f', lineDash: [ 6, 6 ], } },
+  { startStepId: steps[ 2 ].id, drawType: 'polyline', endStepId: steps[ 3 ].id, text: '连接1', textAttrs: { padding: [ 0, 0, 20 ], color: '#f00' }, lineAttrs: { lineWidth: 1, color: '#f0f', lineDash: [ 6, 6 ], } },
   { startStepId: steps[ 3 ].id, drawType: 'line', endStepId: steps[ 4 ].id, text: '连接２', textAttrs: { padding: [ 0, 0, 20 ], color: '#f00' }, lineAttrs: { lineWidth: 1, color: '#00f' } },
   { startStepId: steps[ 4 ].id, drawType: 'line', endStepId: steps[ 0 ].id, lineAttrs: { lineWidth: 1, color: '#0f0' } },
 ]

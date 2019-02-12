@@ -10,7 +10,9 @@ class Step extends Base {
     let mergeAttrs = newObj({
       fillColor: 'rgba(0,255,0,1)',
       pos: [ 0, 0 ],
-      text: '步骤'
+      text: '步骤',
+      padding: [ 6, 10 ],
+      shapeAttrs: {}
     }, attrs);
     let { textAttrs } = attrs;
     if (textAttrs && textAttrs.fontSize && !textAttrs.font) { // 如果有fontSize，没有font，label不支持fontSize属性
@@ -56,6 +58,10 @@ class Step extends Base {
   }
   mounted() {
     super.mounted()
+    if (this.drawType === 'polygon_rect') { // 如果是rect，伪造成polygon处理
+      const [ xMin, yMin, xMax, yMax ] = this.sizeBox;
+      this.points = [ [ xMin, yMin ], [ xMax, yMin ], [ xMax, yMax ], [ xMin, yMax ] ]; // 构造多边形的顶点
+    }
     refreshLink(this);
   }
   draw() {

@@ -7,7 +7,7 @@ const linkExtendtion = {
       this.$link = new Polyline();
       this.$arrow = new Triangle();
       const { startPoint, endPoint, text, textAttrs, lineAttrs } = this.attr();
-      let mergeLinkAttrs = newObj({ lineWidth: 2, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, endPoint ] });
+      let mergeLinkAttrs = newObj({ lineWidth: 1, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, endPoint ] });
       this.$link.attr(mergeLinkAttrs);
       this.$arrow.attr({ color: mergeLinkAttrs.color, pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: mergeLinkAttrs.color })
       this.append(this.$link);
@@ -26,7 +26,7 @@ const linkExtendtion = {
       if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
         insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
       }
-      let mergeLinkAttrs = newObj({ lineWidth: 2, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, insertPoint, endPoint ] });
+      let mergeLinkAttrs = newObj({ lineWidth: 1, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, insertPoint, endPoint ] });
       this.$link.attr(mergeLinkAttrs);
       this.$arrow.attr({ color: mergeLinkAttrs.color, pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: mergeLinkAttrs.color });
       this.append(this.$link);
@@ -64,41 +64,25 @@ const linkExtendtion = {
     }
   },
   'update': {
-    rect: function (newAttrs, oldAttrs) { // 矩形框处理剪头指向位置处理
+    ellipse: function (newAttrs, oldAttrs) {
       const endStep = this.getLinkedSteps('end')[ 0 ];
-      const [ xMin, yMin, xMax, yMax ] = endStep.sizeBox;
-      endStep.points = [ [ xMin, yMin ], [ xMax, yMin ], [ xMax, yMax ], [ xMin, yMax ] ]; // 构造多边形的顶点
-      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs); // 用通用多边形逻辑来处理
-    },
-    circle: function (newAttrs, oldAttrs) { // 圆形框处理剪头指向位置处理
-      const endStep = this.getLinkedSteps('end')[ 0 ];
-      const { startPoint, endPoint, theta } = newAttrs;
-      const [ xMin, yMin, xMax, yMax ] = endStep.renderBox;
-      const r = Math.max(xMax - xMin, yMin - yMax) / 2;
+      const { startPoint, endPoint, theta, angle } = newAttrs;
+      const { shapeAttrs } = endStep.attr();
+      const { radiusX, radiusY } = shapeAttrs;
+      const pos = endStep.container.attr('pos');
       if (this.drawType === 'line') {
-        let linkEndPoint = getPointByDistance(endPoint, startPoint, r) // 4为保护距离到实际点的空隙
-        if (linkEndPoint) {
-          linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
-          linkExtendtion.attrUpdate.call(this, [ startPoint, linkEndPoint ], theta, newAttrs);
-        }
+        const [ targetX, targetY ] = geteElipsePoint(radiusX, radiusY, angle)
+        let linkEndPoint = [ pos[ 0 ] + targetX, pos[ 1 ] + targetY ];
+        linkEndPoint = getPointByDistance(linkEndPoint, startPoint, 4);
+        linkExtendtion.attrUpdate.call(this, [ startPoint, linkEndPoint ], theta, newAttrs);
       } else {
-        let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
-        if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
-          insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
-        }
-        let linkEndPoint = getPointByDistance(endPoint, insertPoint, r + 4) // 4为保护距离到实际点的空隙
-        const { theta } = getAngleByPoints(insertPoint, linkEndPoint);
+        let insertPoint = getInsertPoint(startPoint, endPoint);
+        const { angle, theta } = getAngleByPoints(insertPoint, endPoint);
+        const [ targetX, targetY ] = geteElipsePoint(radiusX, radiusY, angle)
+        let linkEndPoint = [ pos[ 0 ] + targetX, pos[ 1 ] + targetY ];
+        linkEndPoint = getPointByDistance(linkEndPoint, insertPoint, 4);
         linkExtendtion.attrUpdate.call(this, [ startPoint, insertPoint, linkEndPoint ], theta, newAttrs);
       }
-    },
-    star: function (newAttrs, oldAttrs) {
-      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs);
-    },
-    triangle: function (newAttrs, oldAttrs) { // 圆形框处理剪头指向位置处理
-      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs);
-    },
-    diamond: function (newAttrs, oldAttrs) {
-      linkExtendtion.update.polygon.call(this, newAttrs, oldAttrs);
     },
     polygon: function (newAttrs, oldAttrs) {
       const endStep = this.getLinkedSteps('end')[ 0 ];
@@ -131,5 +115,23 @@ function updatePolygonByPolyline(points, startPoint, endPoint, newAttrs) {
     const { theta } = getAngleByPoints(insertPoint, linkEndPoint);
     linkExtendtion.attrUpdate.call(this, [ startPoint, insertPoint, linkEndPoint ], theta, newAttrs);
   }
+}
+function getInsertPoint(startPoint, endPoint) {
+  let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
+  if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
+    insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
+  }
+  return insertPoint;
+}
+function geteElipsePoint(radiusX, radiusY, angle) {
+  const tan = 1 / Math.tan(angle);
+  let targetY = Math.sqrt((radiusX * radiusX * radiusY * radiusY) / (radiusX * radiusX + radiusY * radiusY * tan * tan));
+  targetY = angle > 0 ? -targetY : targetY;
+  let targetX = targetY * tan;
+  if (targetY === 0) {
+    targetX = angle > 0 ? radiusX : -radiusX
+  }
+
+  return [ targetX, targetY ]
 }
 export { linkExtendtion }
