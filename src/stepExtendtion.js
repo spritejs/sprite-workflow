@@ -4,7 +4,7 @@ const stepExtendtion = {
   'rect': {
     draw: function () {
       const { text, fillColor, textAttrs } = this.attr();
-      addLabel.call(this, text, newObj(textAttrs, { bgcolor: fillColor, anchor: [ 0.5, 0.5 ], clipOverflow: false }))
+      addLabel.call(this, text, newObj({}, textAttrs, { bgcolor: fillColor, anchor: [ 0.5, 0.5 ], clipOverflow: false }))
     }
   },
   'circle': {
@@ -13,7 +13,7 @@ const stepExtendtion = {
       let $circle = new Circle();
       $circle.attr({ fillColor, radius: 30, pos: [ 0, 0 ] })
       this.append($circle);
-      addLabel.call(this, text, newObj(textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
+      addLabel.call(this, text, newObj({}, textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
     },
   },
   'star': {
@@ -27,7 +27,7 @@ const stepExtendtion = {
         fillColor: fillColor
       });
       this.append($sprite);
-      addLabel.call(this, text, newObj(textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
+      addLabel.call(this, text, newObj({}, textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
     },
   },
   'triangle': {
@@ -39,7 +39,7 @@ const stepExtendtion = {
       let $sprite = new Polygon();
       $sprite.attr({ points: this.points, fillColor })
       this.append($sprite);
-      addLabel.call(this, text, newObj(textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
+      addLabel.call(this, text, newObj({}, textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
     },
   },
   'diamond': {
@@ -53,7 +53,7 @@ const stepExtendtion = {
         fillColor: fillColor
       });
       this.append(this.$sprite);
-      addLabel.call(this, text, newObj(textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
+      addLabel.call(this, text, newObj({}, textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
     }
   }
 }

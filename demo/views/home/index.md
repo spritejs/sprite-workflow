@@ -4,10 +4,10 @@
 
 当然，就算你不是很了解```spritejs```，也没有很大的问题，```spritejs```上手可是非常快的，它能像操作DOM对象一样操作画布上的图形元素。具体可以查看 <a target="_blank" style="font-weight:bold" href='https://www.spritejs.com'> spritejs api </a>
 
-#### 构建折现连接工作流示意图：
+#### 构建带折线连接工作流示意图：
 <img style="display:block;margin:0 auto" src="//spritejs.oss-cn-beijing.aliyuncs.com/images/sprite-workflow01.png" width="450" height="380" />
 
-#### 构建直线连接工作流示意图：
+#### 构建简单直线工作流示意图：
 
 <img style="display:block;margin:0 auto" src="//spritejs.oss-cn-beijing.aliyuncs.com/images/sprite-workflow02.png" width="450" height="380" />
 

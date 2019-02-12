@@ -6,6 +6,10 @@ export default {
   'properties': {
     'startStepId': 'string',
     'endStepId': 'string',
+    'text': 'string',
+    'textAttrs': {
+      'type': 'object'
+    }
   },
   'required': [ 'id' ]
 }

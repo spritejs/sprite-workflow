@@ -4,7 +4,11 @@ export default {
   'description': 'Schema of sprite workflow',
   'type': 'object',
   'properties': {
-    'id': 'string'
+    'id': 'string',
+    'text': 'string',
+    'textAttrs': {
+      'type': 'object'
+    }
   },
   'required': [ 'id' ]
 }

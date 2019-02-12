@@ -15,7 +15,7 @@
 ```javascript
 const { Workflow, Link, Step } = window.spriteWorkflow;
 const {Polygon,Label,Polyline,Triangle} = window.spritejs;
-let stepObject1 = {id: 'abc-123',pos:[ 100, 20 ],text: '我是矩形1'};
+let stepObject1 = {id: 'abc-123',pos:[ 100, 20 ],text: '我是矩形1',fillColor:'#f00'};
 let stepObject2 = {id: 'abc-234',pos:[ 200, 200 ],text: '我是矩形2'};
 let workflow = new Workflow({
   selector:'.block-demo .demo',size:[ 400, 300 ],
