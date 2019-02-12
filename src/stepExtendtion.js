@@ -73,6 +73,16 @@ const stepExtendtion = {
       this.append(this.$sprite);
       addLabel.call(this, text, textAttrs)
     }
+  },
+  'polygon': {
+    draw: function () {
+      const { text, fillColor, textAttrs, shapeAttrs } = this.attr();
+      this.points = shapeAttrs.points;
+      this.$sprite = new Polygon();
+      this.$sprite.attr(newObj({ points: this.points, fillColor }, shapeAttrs));
+      this.append(this.$sprite);
+      addLabel.call(this, text, textAttrs)
+    }
   }
 }
 function addLabel(text, textAttrs) {

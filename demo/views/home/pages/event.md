@@ -6,7 +6,7 @@ sprite-workflow中包含`Link`与`Step`,这两个对象的实例，对于常见�
 ```javascript
 const { Workflow, Link, Step } = window.spriteWorkflow;
 const {Polygon,Label,Sprite} = window.spritejs;
-let stepObject = {id: 'abc-123',drawType:'polygon-my',pos:[ 100, 20 ],text: '我是矩形3'};
+let stepObject = {id: 'abc-123',drawType:'polygon-my',pos:[ 100, 80 ],text: '我是矩形3'};
 let stepObject1 = {id: 'abc-234',drawType:'star',pos:[ 350, 200 ],text: '五角'};
 let workflow = new Workflow({
   selector:'.block-demo .demo',size:[ 600,460 ],

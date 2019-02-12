@@ -33,7 +33,7 @@ class Link extends Base {
       let mergeAttrs = newObj({ startPoint, endPoint, angle, theta }, newAttrs);
       const endStep = this.getLinkedSteps('end')[ 0 ];
       if (endStep) {
-        [ 'rect', 'circle', 'ellipse', 'triangle', 'star', 'diamond', 'polygon' ].forEach(type => {
+        [ 'ellipse', 'polygon' ].forEach(type => {
           if (endStep.drawType.indexOf(type) === 0) {
             linkExtendtion.update[ type ].call(this, mergeAttrs, oldAttrs)
           }
