@@ -21,13 +21,14 @@ const linkExtendtion = {
     polyline: function () { // 折线连接
       this.$link = new Polyline();
       this.$arrow = new Triangle();
-      const { startPoint, endPoint, text, textAttrs } = this.attr();
+      const { startPoint, endPoint, text, textAttrs, lineAttrs } = this.attr();
       let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
       if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
         insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
       }
-      this.$link.attr({ points: [ startPoint, insertPoint, endPoint ], lineWidth: 2, color: '#eee', bgcolor: '#f00' });
-      this.$arrow.attr({ color: '#ccc', pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: '#ccc' })
+      let mergeLinkAttrs = newObj({ lineWidth: 2, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, insertPoint, endPoint ] });
+      this.$link.attr(mergeLinkAttrs);
+      this.$arrow.attr({ color: mergeLinkAttrs.color, pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: mergeLinkAttrs.color });
       this.append(this.$link);
       this.append(this.$arrow);
       if (getType(text) === 'string') {
@@ -47,12 +48,12 @@ const linkExtendtion = {
         this.$arrow.attr({ pos: endPoint, rotate: theta + (180 - 22.5) })
       }
       if (this.$label) {
-        if (points.length === 2) {
+        if (points.length === 2) { // 如果是直接连接
           const { startPoint, endPoint } = attrs;
           let pos = [ (startPoint[ 0 ] + endPoint[ 0 ]) / 2, (startPoint[ 1 ] + endPoint[ 1 ]) / 2 ]
           this.$label.attr({ pos: pos });
-        } else {
-          let point = points[ Math.ceil(points.length % 2) ];
+        } else { // 否则取中间点
+          let point = points[ Math.ceil(points.length % 2) ]
           this.$label.attr({ pos: point });
         }
         const { textAttrs } = this.attr();
