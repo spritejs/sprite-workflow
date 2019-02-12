@@ -11,7 +11,7 @@ class Link extends Base {
       startPoint: [ 0, 0 ],
       endPoint: [ 0, 0 ]
     })
-    this.attr(newObj(attrs));
+    this.attr(newObj({ lineAttrs: {}, textAttrs: {} }, attrs));
     // 内置的Step 类型，有 ['line','polyline']
     if (option && option.draw) {
       this.draw = option.draw;

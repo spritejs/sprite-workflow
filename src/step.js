@@ -8,17 +8,15 @@ class Step extends Base {
   constructor(attrs, option) {
     super(attrs);
     let mergeAttrs = newObj({
-      padding: [ 6, 10 ],
-      bgcolor: 'rgba(0,255,0,1)',
+      fillColor: 'rgba(0,255,0,1)',
       pos: [ 0, 0 ],
-      borderRadius: [ 5, 5 ],
-      color: '#000000',
-      font: '14px "宋体"',
       text: '步骤'
     }, attrs);
-    if (attrs.fontSize && !attrs.font) { // 如果有fontSize，没有font，label不支持fontSize属性
-      mergeAttrs.font = `${attrs.fontSize}px "宋体"`
+    let { textAttrs } = attrs;
+    if (textAttrs && textAttrs.fontSize && !textAttrs.font) { // 如果有fontSize，没有font，label不支持fontSize属性
+      textAttrs.font = `${textAttrs.fontSize}px "宋体"`
     }
+    mergeAttrs = newObj(mergeAttrs, { textAttrs: textAttrs });
     this.attr(mergeAttrs);
     const { pos } = mergeAttrs;
     this.container.attr({ pos, zIndex: 100 });
