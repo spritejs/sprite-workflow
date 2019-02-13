@@ -14,11 +14,11 @@ const getGuid = () => Math.random().toString(36).slice(2);
 // 内置的Step 类型，有 ['rect','circle','triangle','star','diamond','ellipse','polygon'],默认rect */
 let steps = [
   { id: getGuid(), data: { a: 1 }, fillColor: '#f00', drawType: 'rect', text: '我是矩形', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] }, pos: [ 100, 400 ] },
-      { id: getGuid(), data: { a: 1 }, fillColor: '#ff0', drawType: 'circle', pos: [ 100, 100 ], text: '圆', textAttrs: { fontSize: 18, color: '#f00' } },
-      { id: getGuid(), data: { a: 1 }, fillColor: '#f0f', drawType: 'triangle', pos: [ 200, 200 ], text: '三角', textAttrs: { fontSize: 16 } },
-      { id: getGuid(), data: { a: 1 }, fillColor: '#0ff', drawType: 'star', pos: [ 400, 280 ], text: '五角', textAttrs: { fontSize: 18, color: '#ff0' } },
-      { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 400, 400 ], text: '这里是一个菱形，文字换行', textAttrs: { width: 100, lineBreak: 'normal' } },
-      { id: getGuid(), data: { a: 1 }, fillColor: '#faf', drawType: 'ellipse', pos: [ 400, 500 ], text: '椭圆', textAttrs: { lineBreak: 'normal' }, shapeAttrs: { radiusX: 60, radiusY: 30 } },
+      { id: getGuid(), data: { a: 1 }, fillColor: '#ff0', drawType: 'circle', pos: [ 100, 40 ], text: '圆', textAttrs: { fontSize: 18, color: '#f00' } },
+      { id: getGuid(), data: { a: 1 }, fillColor: '#f0f', drawType: 'triangle', pos: [ 200, 160 ], text: '三角', textAttrs: { fontSize: 16 } },
+      { id: getGuid(), data: { a: 1 }, fillColor: '#0ff', drawType: 'star', pos: [ 400, 180 ], text: '五角', textAttrs: { fontSize: 18, color: '#ff0' } },
+      { id: getGuid(), data: { a: 1 }, drawType: 'diamond', pos: [ 400, 300 ], text: '这里是一个菱形，文字换行', textAttrs: { width: 100, lineBreak: 'normal' } },
+      { id: getGuid(), data: { a: 1 }, fillColor: '#faf', drawType: 'ellipse', pos: [ 400, 400 ], text: '椭圆', textAttrs: { lineBreak: 'normal' }, shapeAttrs: { radiusX: 60, radiusY: 30 } },
 ];
 // 内置的link 类型，有 ['line','polyline'],line 直线 polyline 折线默认line */
 let links = [
@@ -30,7 +30,7 @@ let links = [
       { startStepId: steps[ 5 ].id, drawType: 'line', endStepId: steps[ 4 ].id, lineAttrs: { color: '#faf' } },
       { startStepId: steps[ 0 ].id, drawType: 'polyline', endStepId: steps[ 5 ].id, lineAttrs: { color: '#faf' } },
 ]
-let workflow = new Workflow({ selector: '.block-demo .demo', size: [ width, height ], zoom: [ 0.5, 2 ] });
+let workflow = new Workflow({ selector: '.block-demo .demo', size: [ width, height ], zoom: [ 1, 1 ] });
 steps.forEach(object => {
   let step = new Step(object);
   workflow.append(step);

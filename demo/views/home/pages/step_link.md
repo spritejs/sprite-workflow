@@ -17,7 +17,7 @@ const { Workflow, Link, Step ,functions} = window.spriteWorkflow;
 const {getPolygonIntersectionPoint} = functions;
 const {Polygon,Label,Polyline,Triangle} = window.spritejs;
 let stepObject1 = {id: 'abc-123',pos:[ 100, 20 ],text: '我是矩形1'};
-let stepObject2 = {id: 'abc-234',drawType:'polygon-abc',pos:[ 200, 200 ],text: '我是矩形2'};
+let stepObject2 = {id: 'abc-234',drawType:'polygon-abc',pos:[ 200, 200 ],text: '我是梯形'};
 let workflow = new Workflow({
   selector:'.block-demo .demo',size:[ 500, 460 ],
   zoom: false
@@ -25,7 +25,7 @@ let workflow = new Workflow({
 let step1 = new Step(stepObject1); // 创建step
 let step2 = new Step(stepObject2,{
   draw:function(){
-    this.points = [[0,0],[100,0],[100,40],[50,100],[0,40]]; // 5点的任意多边形
+    this.points =  [[-10,-10],[80,-10],[100,40],[-30,40]]; // 5点的任意多边形，中心点非中心位置
     let $polygon = new Polygon(); // 创建一个多边形
     $polygon.attr({points:this.points,fillColor:'#f00'});
     let $label = new Label(this.attr('text')); // 为stepObject中的text
