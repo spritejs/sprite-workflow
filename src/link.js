@@ -1,7 +1,7 @@
 import { Base } from './base'
 import { newObj } from './utils'
 import { refreshLink, getRelativeStep, getAngleByPoints } from './functions'
-import { _render } from './symbolNames'
+import { _render, _links, _workflow } from './symbolNames'
 import { linkExtendtion } from './linkExtendtion'
 class Link extends Base {
   constructor(attrs, option) {
@@ -53,6 +53,16 @@ class Link extends Base {
   [ _render ]() {
     this.draw();
     return this.container;
+  }
+  remove() {
+    let myWorkflow = this[ _workflow ];
+    let links = myWorkflow[ _links ];
+    for (let i = 0; i < links.length; i++) {
+      if (links[ i ] === this) {
+        myWorkflow.container.removeChild(links[ i ].container)
+        links.splice(i, 1);
+      }
+    }
   }
   mounted() {
     super.mounted()

@@ -45,6 +45,11 @@ class Workflow extends Base {
       links: this[ _links ]
     }
   }
+  clear() {
+    this[ _steps ] = [];
+    this[ _links ] = [];
+    this.container.clear();
+  }
   /**
    * workflow添加子对象 step link
    * @param {sprite} ['Step' 'Link']

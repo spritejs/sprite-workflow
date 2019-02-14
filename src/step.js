@@ -2,7 +2,7 @@ import { Base } from './base'
 import { draggable } from 'sprite-draggable'
 import { refreshLink } from './functions'
 import { newObj } from './utils'
-import { _render } from './symbolNames';
+import { _render, _workflow, _steps, _links } from './symbolNames';
 import { stepExtendtion } from './stepExtendtion'
 class Step extends Base {
   constructor(attrs, option) {
@@ -55,6 +55,27 @@ class Step extends Base {
   [ _render ]() {
     this.draw();
     return this.container
+  }
+  remove() {
+    let myWorkflow = this[ _workflow ];
+    let steps = myWorkflow[ _steps ];
+    let stepId = '';
+    for (let i = 0; i < steps.length; i++) {
+      if (steps[ i ] === this) {
+        myWorkflow.container.removeChild(steps[ i ].container)
+        stepId = steps[ i ].attr('id');
+        steps.splice(i, 1);
+      }
+    }
+    if (stepId) {
+      let links = myWorkflow[ _links ];
+      links.forEach(link => {
+        const { startStepId, endStepId } = link.attr();
+        if (startStepId === stepId || endStepId === stepId) {
+          link.remove();
+        }
+      })
+    }
   }
   mounted() {
     super.mounted()
