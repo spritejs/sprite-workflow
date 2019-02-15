@@ -25,62 +25,54 @@ const stepExtendtion = {
   'ellipse': {
     draw: function () {
       const { text, fillColor, textAttrs, shapeAttrs } = this.attr();
-      let $ellipse = new Ellipse();
+      this.$shape = new Ellipse();
       let mergeShapeAttr = newObj({
         fillColor,
         radiusX: 50,
         radiusY: 24,
       }, shapeAttrs);
       this.attr({ shapeAttrs: mergeShapeAttr });
-      $ellipse.attr(mergeShapeAttr)
-      this.append($ellipse);
+      this.$shape.attr(mergeShapeAttr)
+      this.append(this.$shape);
       addLabel.call(this, text, textAttrs)
     }
   },
   'star': {
     draw: function () {
       this.drawType = 'polygon_start';
-      const { text, fillColor, textAttrs, shapeAttrs } = this.attr();
       this.points = [ [ 14.1, -15.6 ], [ 38.0, -8.5 ], [ 22.8, 11.2 ], [ 23.5, 36.2 ], [ 0, 27.8 ], [ -23.5, 36.2 ], [ -22.8, 11.2 ], [ -38.0, -8.5 ], [ -14.1, -15.6 ], [ 0, -36.2 ] ];
       // 五角星十个顶点的数据坐标，extend-shapes中star坐标有bug
-      let $sprite = new Polygon();
-      $sprite.attr(newObj({ points: this.points, fillColor }, shapeAttrs));
-      this.append($sprite);
-      addLabel.call(this, text, textAttrs)
+      stepExtendtion.polygon.draw.call(this)
     },
   },
   'triangle': {
     draw: function () {
       this.drawType = 'polygon_triangle';
-      const { text, fillColor, textAttrs, shapeAttrs } = this.attr();
       const side = 40; // 正三角形边长一半
       const sqrt3 = Math.sqrt(3);
       this.points = [ [ 0, side / sqrt3 - side * sqrt3 ], [ side, side / sqrt3 ], [ -side, side / sqrt3 ] ];
-      let $sprite = new Polygon();
-      $sprite.attr(newObj({ points: this.points, fillColor }, shapeAttrs))
-      this.append($sprite);
-      addLabel.call(this, text, textAttrs)
+      stepExtendtion.polygon.draw.call(this)
     },
   },
   'diamond': {
     draw: function () {
       this.drawType = 'polygon_diamond';
-      const { text, fillColor, textAttrs, shapeAttrs } = this.attr();
       const side = 30;
       this.points = [ [ 0, side ], [ side * Math.sqrt(3), 0 ], [ 0, -side ], [ -side * Math.sqrt(3), 0 ] ];
-      this.$sprite = new Polygon();
-      this.$sprite.attr(newObj({ points: this.points, fillColor }, shapeAttrs));
-      this.append(this.$sprite);
-      addLabel.call(this, text, textAttrs)
+      stepExtendtion.polygon.draw.call(this)
     }
   },
   'polygon': {
     draw: function () {
       const { text, fillColor, textAttrs, shapeAttrs } = this.attr();
-      this.points = shapeAttrs.points;
-      this.$sprite = new Polygon();
-      this.$sprite.attr(newObj({ points: this.points, fillColor }, shapeAttrs));
-      this.append(this.$sprite);
+      this.points = this.points || shapeAttrs.points;
+      this.$shape = new Polygon();
+      let mergeShapeAttr = newObj({
+        points: this.points, fillColor
+      }, shapeAttrs);
+      this.attr({ shapeAttrs: mergeShapeAttr });
+      this.$shape.attr(mergeShapeAttr);
+      this.append(this.$shape);
       addLabel.call(this, text, textAttrs)
     }
   }
