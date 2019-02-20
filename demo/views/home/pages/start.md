@@ -28,7 +28,7 @@ let links = [
       { startStepId: steps[ 3 ].id, drawType: 'line', endStepId: steps[ 4 ].id, text: '连接２', textAttrs: { padding: [ 0, 0, 20 ], color: '#f00' }, lineAttrs: { color: '#00f' } },
       { startStepId: steps[ 4 ].id, drawType: 'line', endStepId: steps[ 0 ].id, lineAttrs: { color: '#0f0' } },
       { startStepId: steps[ 5 ].id, drawType: 'line', endStepId: steps[ 4 ].id, lineAttrs: { color: '#faf' } },
-      { startStepId: steps[ 0 ].id, drawType: 'polyline', endStepId: steps[ 5 ].id, lineAttrs: { color: '#faf' } },
+      { startStepId: steps[ 0 ].id, drawType: 'polyline', endStepId: steps[ 5 ].id, lineAttrs: { color: '#faf',lineDash: [ 6, 6 ] } },
 ]
 let workflow = new Workflow({ selector: '.block-demo .demo', size: [ width, height ], zoom: [ 1, 1 ] });
 steps.forEach(object => {
@@ -37,7 +37,17 @@ steps.forEach(object => {
 })
 links.forEach(object => {
   let link = new Link(object);
-  workflow.append(link);
+  
+  if (object.drawType === 'polyline') {
+        link.on('mounted', function () {
+          // link.$line表示link的线sprite对象 link.$arrow表示箭头的sprite对象
+          link.$line.animate([ { lineDashOffset: -800 } ], {
+            duration: 16000,
+            iterations: Infinity,
+          });
+        })
+      }
+      workflow.append(link);
 });
 console.log(workflow.children)
 :::

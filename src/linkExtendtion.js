@@ -4,13 +4,13 @@ import { getType, newObj } from './utils'
 const linkExtendtion = {
   'draw': {
     line: function () { // 直线直接连接
-      this.$link = new Polyline();
+      this.$line = new Polyline();
       this.$arrow = new Triangle();
       const { startPoint, endPoint, text, textAttrs, lineAttrs } = this.attr();
       let mergeLinkAttrs = newObj({ lineWidth: 1, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, endPoint ] });
-      this.$link.attr(mergeLinkAttrs);
+      this.$line.attr(mergeLinkAttrs);
       this.$arrow.attr({ color: mergeLinkAttrs.color, pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: mergeLinkAttrs.color })
-      this.append(this.$link);
+      this.append(this.$line);
       this.append(this.$arrow);
       if (getType(text) === 'string') {
         this.$label = new Label(text);
@@ -19,17 +19,19 @@ const linkExtendtion = {
       }
     },
     polyline: function () { // 折线连接
-      this.$link = new Polyline();
+      this.$line = new Polyline();
       this.$arrow = new Triangle();
       const { startPoint, endPoint, text, textAttrs, lineAttrs } = this.attr();
+      const { lineWidth = 1 } = lineAttrs;
       let insertPoint = [ endPoint[ 0 ], startPoint[ 1 ] ];
       if (Math.abs(endPoint[ 1 ] - startPoint[ 1 ]) < Math.abs(endPoint[ 0 ] - startPoint[ 0 ])) {
         insertPoint = [ startPoint[ 0 ], endPoint[ 1 ] ];
       }
-      let mergeLinkAttrs = newObj({ lineWidth: 1, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, insertPoint, endPoint ] });
-      this.$link.attr(mergeLinkAttrs);
-      this.$arrow.attr({ color: mergeLinkAttrs.color, pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: mergeLinkAttrs.color });
-      this.append(this.$link);
+      let lineEndPoint = getPointByDistance(endPoint, insertPoint, lineWidth)
+      let mergeLinkAttrs = newObj({ lineWidth: 1, color: '#eee', bgcolor: '#f00' }, lineAttrs, { points: [ startPoint, insertPoint, lineEndPoint ] });
+      this.$line.attr(mergeLinkAttrs);
+      this.$arrow.attr({ color: mergeLinkAttrs.color, pos: [ endPoint ], sides: [ 8 + lineWidth, 8 + lineWidth ], angle: 45, fillColor: mergeLinkAttrs.color });
+      this.append(this.$line);
       this.append(this.$arrow);
       if (getType(text) === 'string') {
         this.$label = new Label(text);
@@ -39,9 +41,14 @@ const linkExtendtion = {
     }
   },
   'attrUpdate': function (points, theta, attrs) {
-    if (points && points.length) {
-      if (this.$link) {
-        this.$link.attr({ points: points });
+    if (points && points.length > 1) {
+      const { lineAttrs: { lineWidth = 1 } } = this.attr();
+      let len = points.length;
+      if (this.$line) {
+        let endPoint = getPointByDistance(points[ len - 1 ], points[ len - 2 ], lineWidth);
+        let newPoints = points.concat();
+        newPoints[ len - 1 ] = endPoint;
+        this.$line.attr({ points: newPoints });
       }
       if (this.$arrow) {
         let endPoint = points[ points.length - 1 ];

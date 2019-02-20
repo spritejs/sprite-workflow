@@ -45,7 +45,7 @@
       { startStepId: steps[ 3 ].id, drawType: 'line', endStepId: steps[ 4 ].id, text: '连接２', textAttrs: { padding: [ 0, 0, 20 ], color: '#f00' }, lineAttrs: { color: '#00f' } },
       { startStepId: steps[ 4 ].id, drawType: 'line', endStepId: steps[ 0 ].id, lineAttrs: { color: '#0f0' } },
       { startStepId: steps[ 5 ].id, drawType: 'line', endStepId: steps[ 4 ].id, lineAttrs: { color: '#faf' } },
-      { startStepId: steps[ 0 ].id, drawType: 'polyline', endStepId: steps[ 5 ].id, lineAttrs: { color: '#faf' } },
+      { startStepId: steps[ 0 ].id, drawType: 'polyline', endStepId: steps[ 5 ].id, lineAttrs: { color: '#faf', lineWidth: 5, lineDash: [ 6, 12 ] } },
     ]
 
     let workflow = new Workflow({ selector: '#workflow', size: [ width, height ], zoom: [ 0.5, 2 ] });
@@ -55,6 +55,14 @@
     })
     links.forEach(object => {
       let link = new Link(object);
+      if (object.drawType === 'polyline') {
+        link.on('mounted', function () {
+          link.$line.animate([ { lineDashOffset: -40 } ], {
+            duration: 400,
+            iterations: Infinity,
+          });
+        })
+      }
       workflow.append(link);
     });
   </script>
