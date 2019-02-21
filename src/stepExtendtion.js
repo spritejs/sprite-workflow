@@ -79,9 +79,9 @@ const stepExtendtion = {
 }
 function addLabel(text, textAttrs) {
   if (getType(text) === 'string') {
-    let $label = new Label(text);
-    $label.attr(newObj({}, { anchor: [ 0.5 ], clipOverflow: false }, textAttrs))
-    this.append($label);
+    this.$label = new Label(text);
+    this.$label.attr(newObj({}, { anchor: [ 0.5 ], clipOverflow: false }, textAttrs))
+    this.append(this.$label);
   }
 }
 export { stepExtendtion }
