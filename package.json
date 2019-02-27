@@ -1,6 +1,6 @@
 {
   "name": "sprite-workflow",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Draws workflow chart diagrams with spritejs",
   "main": "lib/index.js",
   "directories": {
