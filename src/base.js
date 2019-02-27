@@ -104,6 +104,7 @@ class Base extends BaseNode {
     }
     this.sizeBox = [ xMin, yMin, xMax, yMax ];
     this.renderBox = [ oX + xMin, oY + yMin, oX + xMax, oY + yMax ];
+    this.forceDistance = Math.sqrt((xMax - xMin) ** 2 + (yMax - yMin) ** 2) / 2;
   }
 }
 export { Base }

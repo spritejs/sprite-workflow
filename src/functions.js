@@ -168,4 +168,8 @@ function getAngleByPoints(point1, point2) {
   return { angle, theta }
 }
 
-export { refreshLink, getRelativeStep, getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints }
+function getDistansceByPoints(point1, point2) {
+  return Math.sqrt((point2[ 0 ] - point1[ 0 ]) ** 2 + (point2[ 1 ] - point1[ 1 ]) ** 2);
+}
+
+export { refreshLink, getRelativeStep, getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints, getDistansceByPoints }

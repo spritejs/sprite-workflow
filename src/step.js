@@ -2,13 +2,15 @@ import { Base } from './base'
 import { draggable } from 'sprite-draggable'
 import { refreshLink } from './functions'
 import { newObj } from './utils'
-import { _render, _workflow, _steps, _links } from './symbolNames';
+import { _render, _workflow, _steps, _links, _isDragging } from './symbolNames';
 import { stepExtendtion } from './stepExtendtion'
 class Step extends Base {
   constructor(attrs, option) {
     super(attrs);
     let mergeAttrs = newObj({
       fillColor: 'rgba(0,255,0,1)',
+      linkReject: false, // link 斥力 两个拥有linkReject属性的step会互斥，互斥1为系数
+      weight: 1,
       pos: [ 0, 0 ],
       text: '步骤',
       padding: [ 6, 10 ],
@@ -26,12 +28,15 @@ class Step extends Base {
     /* 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
     this.on('dragstart', (e) => {
       this.container.attr({ zIndex: 110 });
+      this[ _isDragging ] = true;
     });
     this.on('drag', (e) => {
       refreshLink(this);
+      this[ _isDragging ] = true;
     });
     this.on('dragend', (e) => {
       this.container.attr({ zIndex: 100 });
+      delete this[ _isDragging ];
     });
     // 如果外部重写draw方法，用外部方法覆盖,并将step的类型设置成custom
     if (option && option.draw) {

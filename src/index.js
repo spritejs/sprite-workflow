@@ -3,8 +3,10 @@ import { Base } from './base'
 import { Step } from './step'
 import { Link } from './link'
 import * as spritejs from 'spritejs'
-import { _steps, _links, _workflow, _render } from './symbolNames'
+import { _steps, _links, _workflow, _render, _isDragging, _hasLinkReject } from './symbolNames'
 import * as functions from './functions'
+import { getType } from './utils'
+import { Ticks } from './ticks'
 
 const { Scene } = spritejs;
 spritejs.use(install);
@@ -16,6 +18,7 @@ class Workflow extends Base {
   * size:canvas大小
   * zoom:是缩放
   * **/
+    this.ticks = new Ticks(); // 自身的ticks函数处理
     this.attr(Object.assign({
       'selector': '',
       'size': [ 600, 400 ],
@@ -65,6 +68,86 @@ class Workflow extends Base {
     }
     this.container.append(sprite[ _render ]());
     sprite.dispatchEvent('mounted', {});
+    linkReject.call(this);
+  }
+}
+function ticks() {
+  let steps = this[ _steps ];
+  let ticksStep = [];
+  for (let i = 0; i < steps.length; i++) {
+    let curStep = steps[ i ];
+    let linkReject = curStep.attr('linkReject');
+    if (getType(linkReject) === 'number') {
+      ticksStep.push(curStep);
+      for (let j = i + 1; j < steps.length; j++) {
+        let nextStep = steps[ j ];
+        let nextLinkReject = nextStep.attr('linkReject');
+        if (getType(nextLinkReject) === 'number') {
+          moveStep(curStep, nextStep, linkReject, nextLinkReject)
+        }
+      }
+    }
+  }
+}
+function linkReject() {
+  let workflow = this;
+  if (workflow[ _hasLinkReject ]) return; // 如果改ticks已经执行，跳过
+  workflow[ _hasLinkReject ] = true;
+  ticks.tagame = 'linkReject';
+  this.ticks.add(ticks.bind(this)); // 互斥ticks处理
+  let steps = this[ _steps ];
+  let ticksStep = [];
+  for (let i = 0; i < steps.length; i++) {
+    let curStep = steps[ i ];
+    let linkReject = curStep.attr('linkReject');
+    if (getType(linkReject) === 'number') {
+      ticksStep.push(curStep);
+    }
+  }
+  if (ticksStep.length <= 1 && workflow.ticks.tasks.length) { // 如果只有一个step有互斥，取消ticks
+    workflow.ticks.clear();
+    delete workflow[ _hasLinkReject ];
+  }
+}
+function moveStep(curStep, nextStep, lr, nlr, angle) {
+  let dis1 = curStep.forceDistance;
+  let dis2 = nextStep.forceDistance;
+  let pos1 = curStep.container.attr('pos');
+  let pos2 = nextStep.container.attr('pos');
+  let currentDis = functions.getDistansceByPoints(pos1, pos2);
+  if (currentDis === 0) {
+    let pos = [ pos1[ 0 ] + 1, pos1[ 1 ] ];
+    curStep.container.attr({ pos: pos });
+    return;
+  }
+  let targetDis = dis1 * lr + dis2 * nlr;
+  if (currentDis < targetDis + 1) {
+    let diffDis = Math.abs(currentDis - targetDis);
+    if (curStep[ _isDragging ] || nextStep[ _isDragging ]) { // 如果存在dragging的情况
+      let myStep = curStep;
+      let pos = pos1;
+      if (curStep[ _isDragging ]) {
+        myStep = nextStep;
+        pos = pos2;
+        pos2 = pos1;
+      }
+      let point = functions.getPointByDistance(pos, pos2, -diffDis / 2); // 缓动，每次移动目标距离的一半
+      myStep.container.attr({ pos: point });
+      functions.refreshLink(myStep);
+    } else {
+      let move1 = diffDis * dis1 * lr / targetDis;
+      let move2 = diffDis * dis2 * nlr / targetDis;
+      if (Math.abs(move1) > 1) {
+        let point1 = functions.getPointByDistance(pos1, pos2, -move1 / 2); // 缓动，每次移动目标距离的一半
+        curStep.container.attr({ pos: point1 });
+        functions.refreshLink(curStep);
+      }
+      if (Math.abs(move2) > 1) {
+        let point2 = functions.getPointByDistance(pos2, pos1, -move2 / 2);
+        nextStep.container.attr({ pos: point2 });
+        functions.refreshLink(nextStep)
+      }
+    }
   }
 }
 function zoom(layer, group) {

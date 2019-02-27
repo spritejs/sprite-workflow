@@ -28,12 +28,12 @@ let step2 = new Step(stepObject2);
 let linkObject = {startStepId:'abc-123',drawType:'polyline-abc',endStepId:'abc-234'};
 let link = new Link(linkObject,{
   draw:function(){
-    this.$link = new Polyline();
+    this.$line = new Polyline();
     this.$arrow = new Triangle();
     const { startPoint, endPoint } = this.attr();
-    this.$link.attr({lineDash:[6,6],lineDashOffset:6,points: [ startPoint, endPoint ], lineWidth: 1, color: '#0ff'});
+    this.$line.attr({lineDash:[6,6],lineDashOffset:6,points: [ startPoint, endPoint ], lineWidth: 1, color: '#0ff'});
     this.$arrow.attr({ color: '#0ff', pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: '#0ff' })
-    this.append(this.$link);
+    this.append(this.$line);
     this.append(this.$arrow);
   }
 });

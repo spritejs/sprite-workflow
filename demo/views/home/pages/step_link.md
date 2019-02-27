@@ -36,14 +36,14 @@ let step2 = new Step(stepObject2,{
 
 let link = new Link({startStepId:'abc-123',drawType:'line-abc',endStepId:'abc-234'},{
   draw:function(){
-    this.$link = new Polyline();
+    this.$line = new Polyline();
     this.$arrow = new Triangle();
     this.$label = new Label('线段文字');
     this.$label.attr({anchor:[0.5,0.5]})
     const { startPoint, endPoint } = this.attr();
-    this.$link.attr({ points: [ startPoint, endPoint ], lineWidth: 1, color: '#0ff'});
+    this.$line.attr({ points: [ startPoint, endPoint ], lineWidth: 1, color: '#0ff'});
     this.$arrow.attr({ color: '#0ff', pos: [ endPoint ], sides: [ 8, 8 ], angle: 45, fillColor: '#0ff' })
-    this.append(this.$link);
+    this.append(this.$line);
     this.append(this.$arrow);
     this.append(this.$label);
   },

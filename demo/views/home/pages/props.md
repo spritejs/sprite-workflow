@@ -24,6 +24,7 @@
 | fillColor   | 图形填充颜色                                                  |          |                                                                   |        |
 | pos         | 图形的位置                                                    |          |                                                                   |        |
 | text        | 步骤显示文本                                                  |          |                                                                   |        |
+| linkReject  | 连接斥力，当两个step该值都为数字时，产生斥力                  |          | 1                                                                 |        |
 | textAttrs   | 步骤显示文本样式                                              |          | { padding: [ 0, 0, 20 ], color: '#f00' }                          |        |
 | shapeAttrs  | 步骤图形样式属性(不同类型，设置值不同，参考extend-shapes属性) |          | { radiusX: 60, radiusY: 30 } drawType为ellipse时，设置椭圆大小    |        |
 | drawType    | 绘制类型                                                      | String   | ['rect','circle','triangle','star','diamond','ellipse','polygon'] | rect   |
