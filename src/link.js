@@ -11,7 +11,15 @@ class Link extends Base {
       startPoint: [ 0, 0 ],
       endPoint: [ 0, 0 ]
     })
+    let mergeAttrs = newObj({ lineAttrs: {}, textAttrs: {} }, attrs);
+    if (mergeAttrs.textAttrs.fontSize) { // 如果有fontSize，没有font，label不支持fontSize属性
+      if (!mergeAttrs.textAttrs.font) {
+        mergeAttrs.textAttrs.font = `${parseInt(mergeAttrs.textAttrs.fontSize)}px "宋体"`
+      }
+      delete mergeAttrs.textAttrs.fontSize;
+    }
     this.attr(newObj({ lineAttrs: {}, textAttrs: {} }, attrs));
+
     // 内置的Step 类型，有 ['line','polyline']
     if (option && option.draw) {
       this.draw = option.draw;

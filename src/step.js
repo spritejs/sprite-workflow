@@ -14,13 +14,15 @@ class Step extends Base {
       pos: [ 0, 0 ],
       text: '步骤',
       padding: [ 6, 10 ],
-      shapeAttrs: {}
+      shapeAttrs: {},
+      textAttrs: {}
     }, attrs);
-    let { textAttrs } = attrs;
-    if (textAttrs && textAttrs.fontSize && !textAttrs.font) { // 如果有fontSize，没有font，label不支持fontSize属性
-      textAttrs.font = `${textAttrs.fontSize}px "宋体"`
+    if (mergeAttrs.textAttrs.fontSize) { // 如果有fontSize，没有font，label不支持fontSize属性
+      if (!mergeAttrs.textAttrs.font) {
+        mergeAttrs.textAttrs.font = `${parseInt(mergeAttrs.textAttrs.fontSize)}px "宋体"`
+      }
+      delete mergeAttrs.textAttrs.fontSize;
     }
-    mergeAttrs = newObj(mergeAttrs, { textAttrs: textAttrs });
     this.attr(mergeAttrs);
     const { pos } = mergeAttrs;
     this.container.attr({ pos, zIndex: 100 });
