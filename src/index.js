@@ -62,9 +62,31 @@ class Workflow extends Base {
     sprite[ _workflow ] = this;
     sprite[ '$parent' ] = this.container;
     if (sprite instanceof Step) {
-      this[ _steps ].push(sprite);
+      let steps = this[ _steps ];
+      let curId = sprite.attr('id');
+      for (let i = 0; i < steps.length; i++) { // 如果存在相同id的step，删除开始的一个
+        let myId = steps[i].attr('id');
+        if (myId === curId) {
+          console.warn(`exist the same Step(id:${curId}),please remove it first `);
+          return;
+        }
+      }
+      steps.push(sprite);
     } else if (sprite instanceof Link) {
-      this[ _links ].push(sprite);
+      let links = this[ _links ];
+      let { startStepId: startId, endStepId: endId } = sprite.attr();
+      for (let i = 0; i < links.length; i++) { // 如果存在相同id的link，删除开始的一个
+        let { startStepId, endStepId } = links[i].attr();
+        if (startStepId === startId && endId === endStepId) {
+          console.warn(`exist the same Link(startStepId:${startStepId},endStepId:${endStepId}),please remove it first `);
+          return;
+        }
+      }
+      if (startId === endId) { // 如果有相同的link
+        console.warn(`the  Link(startStepId:${startId}),has the same startStepId and endStepId `);
+        return;
+      }
+      links.push(sprite);
     }
     this.container.append(sprite[ _render ]());
     sprite.dispatchEvent('mounted', {});

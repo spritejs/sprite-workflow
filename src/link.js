@@ -68,7 +68,7 @@ class Link extends Base {
     for (let i = 0; i < links.length; i++) {
       if (links[ i ] === this) {
         myWorkflow.container.removeChild(links[ i ].container)
-        links.splice(i, 1);
+        links.splice(i, 1)
       }
     }
   }
