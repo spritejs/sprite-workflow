@@ -59,6 +59,7 @@ class Link extends Base {
     return getRelativeStep(this, type);
   }
   [ _render ]() {
+    this.container.clear()
     this.draw();
     return this.container;
   }

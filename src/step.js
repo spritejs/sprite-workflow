@@ -60,6 +60,7 @@ class Step extends Base {
    * step被workflow调用时渲染方法，通过调用自己的draw()来实现渲染，并且返回container
    */
   [ _render ]() {
+    this.container.clear()
     this.draw();
     return this.container
   }

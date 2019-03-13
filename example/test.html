@@ -49,14 +49,17 @@
       // { startStepId: steps[ 5 ].id, drawType: 'line', endStepId: steps[ 4 ].id, lineAttrs: { color: '#0ff' } },
       { startStepId: steps[ 0 ].id, drawType: 'polyline', endStepId: 'bbbbbb', lineAttrs: { color: '#faf', lineWidth: 5, lineDash: [ 6, 12 ] } },
     ]
-
+    let arrSteps = [];
+    let arrLinks = [];
     let workflow = new Workflow({ selector: '#workflow', size: [ width, height ], zoom: [ 0.5, 2 ] });
     steps.forEach(object => {
       let step = new Step(object);
+      arrSteps.push(step)
       workflow.append(step);
     })
     links.forEach(object => {
       let link = new Link(object);
+      arrLinks.push(link);
       if (object.drawType === 'polyline') {
         link.on('mounted', function () {
           link.$line.animate([ { lineDashOffset: -40 } ], {
