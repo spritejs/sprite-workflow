@@ -65,7 +65,10 @@ const linkExtendtion = {
         }
         const { textAttrs } = this.attr();
         if (textAttrs.autoRotate === 'auto') {
-          this.$label.attr({ rotate: theta + (textAttrs.rotate || 0) })
+          if (theta > 90) { theta = theta - 180 } else if (theta < -90) {
+            theta = theta + 180
+          }
+          this.$label.attr({ rotate: theta })
         }
       }
     }
