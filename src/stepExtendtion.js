@@ -70,6 +70,7 @@ const stepExtendtion = {
       let mergeShapeAttr = newObj({
         points: this.points, fillColor
       }, shapeAttrs);
+      this.points = mergeShapeAttr.points;
       this.attr({ shapeAttrs: mergeShapeAttr });
       this.$shape.attr(mergeShapeAttr);
       this.append(this.$shape);
