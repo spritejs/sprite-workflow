@@ -16,6 +16,8 @@
 const { Workflow, Link, Step } = window.spriteWorkflow;
 const {Polygon,Label,Sprite} = window.spritejs;
 let stepObject = {id: 'abc-123',drawType:'polygon-my',pos:[ 100, 20 ],text: '我是矩形3'};
+let stepObject2 = {id: 'abc-1234',drawType:'rect',pos:[ 280, 200 ],text: '我是矩形2'};
+let linkObject = {startStepId:'abc-123',endStepId:'abc-1234',drawType:'curve',lineAttrs: { color: '#0ff', branchOffset:5 }}
 let workflow = new Workflow({
   selector:'.block-demo .demo',size:[ 400, 300 ],
   zoom: false
@@ -24,7 +26,7 @@ let step = new Step(stepObject,{
   draw:function(){
     this.points = [[-50,-20],[50,-20],[50,20],[-50,20]]; // 四个点组成矩形,中心点在[0,0]
     let $polygon = new Polygon(); // 创建一个多边形
-    $polygon.attr({points:this.points,fillColor:'#0ff'});
+    $polygon.attr({anchor:[0.5],points:this.points,fillColor:'#0ff'});
     let $label = new Label(this.attr('text')); // 为stepObject中的text
     $label.attr({anchor:[0.5]});// anchor设置为居中对其
     //加入一张图片
@@ -35,11 +37,15 @@ let step = new Step(stepObject,{
     this.append($sprite);
   }
 }); // 创建step
+let step2 = new Step(stepObject2);
+let link = new Link(linkObject)
 step.on('drag',function(e){ //drag事件，同样可以支持，click等等鼠标事件
   console.log(e);
 })
 
 workflow.append(step); // 添加step到workflow中
+workflow.append(step2)
+workflow.append(link)
 
 console.log(workflow.children)
 

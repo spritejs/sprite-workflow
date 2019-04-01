@@ -1,5 +1,5 @@
 ## 自定义Link显示内容
-默认的Link的drawType有 ```['line','polyline']```类型，可以对应的绘制直线，折线，当然如果使用场景中，这两种满足不了要求，可以自定义Link的draw与update方法，方式与自定义Step的draw方法类似。如果link的连接方式与默认相同，可通过drawType 来指定连接类型，如下例中如果drawType为`polyline`开头，连接线与折线
+默认的Link的drawType有 ```['line','polyline','curve']```类型，可以对应的绘制直线，折线，当然如果使用场景中，这两种满足不了要求，可以自定义Link的draw与update方法，方式与自定义Step的draw方法类似。如果link的连接方式与默认相同，可通过drawType 来指定连接类型，如下例中如果drawType为`polyline`开头，连接线与折线，drawType为`curve`,连线为曲线，此时，lineAttrs中可以设置branchOffset来设置曲线开始点的偏移量
 ```javascript
  let link = new Link({…},{
    draw:function(){

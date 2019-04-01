@@ -1,5 +1,5 @@
 import { Polyline, Triangle, Label, Polycurve } from 'spritejs'
-import { getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints, getRelativeStep, getDistansceByPoints } from './functions'
+import { getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints, getRelativeStep } from './functions'
 import { getType, newObj } from './utils'
 const linkExtendtion = {
   'draw': {
@@ -74,12 +74,12 @@ const linkExtendtion = {
           let insertSpoint = [centerPoint[0], startPoint[1]]
           let insertEpoint = [centerPoint[0], endPoint[1]]
           let curvePoints = [];
-          if (branchOffset !== undefined) {
-            curvePoints.push([startPoint[0], startPoint[1], startPoint[0] + startOffset, startPoint[1], startPoint[0] + branchOffset, startPoint[1]]);
+          if (branchOffset !== 0) {
+            curvePoints.push([startPoint[0], startPoint[1], startPoint[0] + 1, startPoint[1], startPoint[0] + branchOffset, startPoint[1]]);
             curvePoints.push([startPoint[0] + branchOffset, startPoint[1], insertSpoint[0], insertSpoint[1], centerPoint[0], centerPoint[1]]);
             curvePoints.push([centerPoint[0], centerPoint[1], insertEpoint[0], insertEpoint[1], endPoint[0], endPoint[1]]);
           } else {
-            curvePoints[0] = [startPoint[0] + startOffset, startPoint[1], insertSpoint[0], insertSpoint[1], centerPoint[0], centerPoint[1]];
+            curvePoints[0] = [startPoint[0], startPoint[1], insertSpoint[0], insertSpoint[1], centerPoint[0], centerPoint[1]];
             curvePoints[1] = [centerPoint[0], centerPoint[1], insertEpoint[0], insertEpoint[1], endPoint[0], endPoint[1]];
           }
           this.$line.attr({ startPoint: startPoint, points: curvePoints });
