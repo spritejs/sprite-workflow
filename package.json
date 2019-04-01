@@ -1,6 +1,6 @@
 {
   "name": "sprite-workflow",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Draws workflow chart diagrams with spritejs",
   "main": "lib/index.js",
   "directories": {
@@ -46,7 +46,6 @@
     "eslint-plugin-standard": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "markdown-it-container": "^2.0.0",
-    "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "scapegoat": "^1.0.0",
     "split.js": "^1.5.10",
@@ -62,7 +61,7 @@
   "homepage": "https://github.com/spritejs/sprite-workflow",
   "dependencies": {
     "q-schema-validator": "0.0.3",
-    "sprite-draggable": "0.1.14",
-    "sprite-extend-shapes": "^0.1.51"
+    "sprite-draggable": "0.1.15",
+    "sprite-extend-shapes": "0.1.65"
   }
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <style>
+    #workflow {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+
+<body>
+  workflow design tools
+  <div id="workflow"></div>
+  <script src="https://unpkg.com/spritejs/dist/spritejs.min.js"></script>
+  <!-- <script src="https://unpkg.com/sprite-workflow/lib/index.js"></script> -->
+  <script src="sprite-workflow.js"></script>
+  <script>
+    const { Workflow, Link, Step } = window.spriteWorkflow;
+    let $wrap = document.querySelector('#workflow');
+    const width = $wrap.offsetWidth;
+    const height = $wrap.offsetHeight;
+    const getGuid = () => Math.random().toString(36).slice(2);
+
+    // 内置的Step 类型，有 ['rect','circle','triangle','star','diamond'],默认rect */
+    let steps = [
+      { id: getGuid(), linkReject: 1, data: { a: 1 }, fillColor: '#ff0', drawType: 'rect', pos: [ 400, 400 ], text: '2', shapeAttrs: { radius: 10 }, textAttrs: { fontSize: 8, color: '#f00' } },
+      { id: 'aaaaaaa', linkReject: 1, data: { a: 1 }, fillColor: '#f00', drawType: 'rect', pos: [ 100, 400 ], text: '我是矩形1', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] } },
+      // { id: 'aaaaaaa', linkReject: 1, data: { a: 1 }, fillColor: '#f00', drawType: 'rect', pos: [ 200, 400 ], text: '我是矩形1', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] } },
+      { id: getGuid(), linkReject: 1, data: { a: 1 }, fillColor: '#f00', drawType: 'rect', pos: [ 100, 300 ], text: '我是矩形2', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] } },
+      { id: getGuid(), linkReject: 1, data: { a: 1 }, fillColor: '#f00', drawType: 'rect', pos: [ 100, 200 ], text: '我是矩形2', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] } },
+      { id: getGuid(), linkReject: 1, data: { a: 1 }, fillColor: '#f00', drawType: 'rect', pos: [ 100, 500 ], text: '我是矩形2', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] } },
+      { id: getGuid(), linkReject: 1, data: { a: 1 }, fillColor: '#f00', drawType: 'rect', pos: [ 100, 600 ], text: '我是矩形2', textAttrs: { fontSize: 12, borderRadius: 5, padding: [ 10, 10 ] } },
+    ];
+    // 内置的link 类型，有 ['line','polyline'],line 直线 polyline 折线默认line */
+    let links = [
+      { startStepId: steps[ 0 ].id, drawType: 'curve', endStepId: steps[ 1 ].id, textAttrs: { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' }, lineAttrs: { branchOffset: 200, color: '#0ff' } },
+      { startStepId: steps[ 0 ].id, drawType: 'curve', endStepId: steps[ 2 ].id, textAttrs: { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' }, lineAttrs: { branchOffset: 200, color: '#0ff' } },
+      { startStepId: steps[ 0 ].id, drawType: 'curve', endStepId: steps[ 3 ].id, textAttrs: { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' }, lineAttrs: { branchOffset: 200, color: '#0ff' } },
+      { startStepId: steps[ 0 ].id, drawType: 'curve', endStepId: steps[ 4 ].id, textAttrs: { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' }, lineAttrs: { branchOffset: 200, color: '#0ff' } },
+      { startStepId: steps[ 0 ].id, drawType: 'curve', endStepId: steps[ 5 ].id, textAttrs: { padding: [ 0, 0, 20 ], color: '#f00', autoRotate: 'auto' }, lineAttrs: { branchOffset: 200, color: '#0ff' } },
+    ]
+    let arrSteps = [];
+    let arrLinks = [];
+    let workflow = new Workflow({ selector: '#workflow', size: [ width, height ], zoom: [ 0.5, 2 ] });
+    steps.forEach(object => {
+      let step = new Step(object);
+      arrSteps.push(step)
+      workflow.append(step);
+    })
+    links.forEach(object => {
+      let link = new Link(object);
+      arrLinks.push(link);
+      workflow.append(link);
+    });
+  </script>
+</body>
+
+</html>

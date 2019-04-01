@@ -1,5 +1,5 @@
-import { Polyline, Triangle, Label } from 'spritejs'
-import { getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints } from './functions'
+import { Polyline, Triangle, Label, Polycurve } from 'spritejs'
+import { getPointByDistance, getPolygonIntersectionPoint, getAngleByPoints, getRelativeStep, getDistansceByPoints } from './functions'
 import { getType, newObj } from './utils'
 const linkExtendtion = {
   'draw': {
@@ -17,6 +17,13 @@ const linkExtendtion = {
         this.$label.attr(newObj({}, textAttrs, { anchor: [ 0.5, 0.5 ], clipOverflow: false }))
         this.append(this.$label);
       }
+    },
+    curve: function() {
+      this.$line = new Polycurve();
+      const { points, lineAttrs } = this.attr();
+      let mergeLinkAttrs = newObj({ lineWidth: 1, color: '#eee' }, lineAttrs, { points: points });
+      this.$line.attr(mergeLinkAttrs);
+      this.append(this.$line)
     },
     polyline: function () { // 折线连接
       this.$line = new Polyline();
@@ -42,13 +49,46 @@ const linkExtendtion = {
   },
   'attrUpdate': function (points, theta, attrs) {
     if (points && points.length > 1) {
-      const { lineAttrs: { lineWidth = 1 } } = this.attr();
+      let { lineAttrs: { lineWidth = 1, branchOffset = 0 } } = this.attr();
       let len = points.length;
       if (this.$line) {
-        let endPoint = getPointByDistance(points[ len - 1 ], points[ len - 2 ], lineWidth);
-        let newPoints = points.concat();
-        newPoints[ len - 1 ] = endPoint;
-        this.$line.attr({ points: newPoints });
+        if (this.drawType === 'curve') {
+          let startStep = getRelativeStep(this, 'start')[0];
+          let endStep = getRelativeStep(this, 'end')[0]
+          let startOffset = (startStep.sizeBox[2] - startStep.sizeBox[0]) / 2;
+          let endOffset = (endStep.sizeBox[2] - endStep.sizeBox[0]) / 2;
+          let startPoint = startStep.container.attr('pos');
+          let endPoint = endStep.container.attr('pos');
+
+          if (startPoint[0] > endPoint[0]) {
+            startOffset = -startOffset;
+            endOffset = -endOffset;
+            branchOffset = -branchOffset;
+          }
+          let stageHeight = this.container.layer.viewport[0]
+          let perDis = Math.abs(startPoint[1] - endPoint[1]) / stageHeight / 2; // [0~0.5]
+          let offsetDis = perDis * (startPoint[0] - endPoint[0]);
+          startPoint = [startPoint[0] + startOffset, startPoint[1]];
+          endPoint = [endPoint[0] - endOffset, endPoint[1]];
+          let centerPoint = [(startPoint[0] + branchOffset + endPoint[0]) / 2 + offsetDis * 0.5, (startPoint[1] + endPoint[1]) / 2];
+          let insertSpoint = [centerPoint[0], startPoint[1]]
+          let insertEpoint = [centerPoint[0], endPoint[1]]
+          let curvePoints = [];
+          if (branchOffset !== undefined) {
+            curvePoints.push([startPoint[0], startPoint[1], startPoint[0] + startOffset, startPoint[1], startPoint[0] + branchOffset, startPoint[1]]);
+            curvePoints.push([startPoint[0] + branchOffset, startPoint[1], insertSpoint[0], insertSpoint[1], centerPoint[0], centerPoint[1]]);
+            curvePoints.push([centerPoint[0], centerPoint[1], insertEpoint[0], insertEpoint[1], endPoint[0], endPoint[1]]);
+          } else {
+            curvePoints[0] = [startPoint[0] + startOffset, startPoint[1], insertSpoint[0], insertSpoint[1], centerPoint[0], centerPoint[1]];
+            curvePoints[1] = [centerPoint[0], centerPoint[1], insertEpoint[0], insertEpoint[1], endPoint[0], endPoint[1]];
+          }
+          this.$line.attr({ startPoint: startPoint, points: curvePoints });
+        } else {
+          let endPoint = getPointByDistance(points[ len - 1 ], points[ len - 2 ], lineWidth);
+          let newPoints = points.concat();
+          newPoints[ len - 1 ] = endPoint;
+          this.$line.attr({ points: newPoints });
+        }
       }
       if (this.$arrow) {
         let endPoint = points[ points.length - 1 ];
@@ -99,10 +139,10 @@ const linkExtendtion = {
       const { startPoint, endPoint, theta } = newAttrs;
       const [ xMin, yMin ] = endStep.container.attr('pos');
       const realPoints = endStep.points.map(point => { return [ xMin + point[ 0 ], yMin + point[ 1 ] ] })
-      if (this.drawType.indexOf('polyline') === 0) {
-        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint, newAttrs)
-      } else {
+      if (this.drawType.indexOf('polyline') !== 0) {
         updatePolygonByline.call(this, realPoints, startPoint, endPoint, theta, newAttrs);
+      } else {
+        updatePolygonByPolyline.call(this, realPoints, startPoint, endPoint, newAttrs)
       }
     }
   }
