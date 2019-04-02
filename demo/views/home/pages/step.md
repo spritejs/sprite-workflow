@@ -26,7 +26,7 @@ let step = new Step(stepObject,{
   draw:function(){
     this.points = [[-50,-20],[50,-20],[50,20],[-50,20]]; // 四个点组成矩形,中心点在[0,0]
     let $polygon = new Polygon(); // 创建一个多边形
-    $polygon.attr({anchor:[0.5],points:this.points,fillColor:'#0ff'});
+    $polygon.attr({points:this.points,fillColor:'#0ff'});
     let $label = new Label(this.attr('text')); // 为stepObject中的text
     $label.attr({anchor:[0.5]});// anchor设置为居中对其
     //加入一张图片
