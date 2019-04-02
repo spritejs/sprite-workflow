@@ -1,6 +1,6 @@
 {
   "name": "sprite-workflow",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Draws workflow chart diagrams with spritejs",
   "main": "lib/index.js",
   "directories": {
@@ -63,6 +63,6 @@
   "dependencies": {
     "q-schema-validator": "0.0.3",
     "sprite-draggable": "0.1.15",
-    "sprite-extend-shapes": "0.1.65"
+    "sprite-extend-shapes": "0.1.51"
   }
 }
