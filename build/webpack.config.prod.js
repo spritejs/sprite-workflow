@@ -1,7 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const webpack = require('webpack');
-const HTMLPlugin = require('html-webpack-plugin')
 
 let babelConf;
 if (fs.existsSync('../.babelrc')) {
@@ -12,6 +10,7 @@ if (fs.existsSync('../.babelrc')) {
 module.exports = function (env = {}) {
   return {
     mode: 'production',
+    devtool: 'source-map',
     entry: {
       index: path.resolve(__dirname, '../src/index')
     },
@@ -37,4 +36,4 @@ module.exports = function (env = {}) {
       spritejs: 'spritejs'
     }
   };
-};
+}

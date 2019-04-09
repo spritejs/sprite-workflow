@@ -55,6 +55,9 @@ const linkExtendtion = {
         if (this.drawType === 'curve') {
           let startStep = getRelativeStep(this, 'start')[0];
           let endStep = getRelativeStep(this, 'end')[0]
+          if (startStep === undefined || endStep === undefined) {
+            return;
+          }
           let startOffset = (startStep.sizeBox[2] - startStep.sizeBox[0]) / 2;
           let endOffset = (endStep.sizeBox[2] - endStep.sizeBox[0]) / 2;
           let startPoint = startStep.container.attr('pos');
