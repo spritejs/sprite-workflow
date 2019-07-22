@@ -12,7 +12,7 @@ module.exports = function (env = {}) {
     mode: 'production',
     devtool: 'source-map',
     entry: {
-      index: path.resolve(__dirname, '../src/index')
+      index: path.resolve(__dirname, '../src/index.js')
     },
     output: {
       path: path.resolve(__dirname, '../lib'),

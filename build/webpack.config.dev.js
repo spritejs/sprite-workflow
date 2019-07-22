@@ -10,16 +10,17 @@ if (fs.existsSync('../.babelrc')) {
 }
 
 module.exports = function (env = {}) {
-  const externals = {};
+  // const externals = {};
   return {
     mode: 'development',
     devtool: 'inline-source-map',
     entry: {
-      "sprite-workflow": path.resolve(__dirname, '../src/index')
+      'sprite-workflow': path.resolve(__dirname, '../src/index'),
+      'test': path.resolve(__dirname, '../example/test.js')
     },
     output: {
-      // path: path.resolve(__dirname, '/'),
-      // filename: '[name].js',
+      path: path.resolve(__dirname, '/'),
+      filename: '[name].js',
       library: 'spriteWorkflow',
       libraryTarget: 'umd'
     },
@@ -35,7 +36,7 @@ module.exports = function (env = {}) {
         },
       ]
     },
-    //stats: 'errors-only',
+    // stats: 'errors-only',
 
     devServer: {
       contentBase: path.join(__dirname, '../example'),
