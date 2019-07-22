@@ -33,7 +33,13 @@ module.exports = function (env = {}) {
       ]
     },
     externals: {
-      spritejs: 'spritejs'
+      spritejs: {
+        root: 'spritejs',
+        commonjs2: 'spritejs/dist/spritejs.min.js',
+        commonjs: 'spritejs/dist/spritejs.min.js',
+        amd: 'spritejs',
+        umd: 'spritejs'
+      }
     }
   };
 }

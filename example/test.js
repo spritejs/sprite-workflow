@@ -1,4 +1,4 @@
-import { Workflow, Step, Link } from '../src/index.js';
+import { Workflow, Step, Link } from '../lib/index.js';
 
 let $wrap = document.querySelector('#workflow');
 const width = $wrap.offsetWidth;
